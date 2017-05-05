@@ -1,0 +1,84 @@
+﻿.nav-collapse {
+    overflow: visible
+}
+
+.notebooks .one-notebook .icon-notebook {
+    background-image: url(../images/sprite_for_ie.png)
+}
+
+.notebooks .active a .icon-notebook {
+    background-image: url(../images/sprite_for_ie.png);
+    width: 40px
+}
+
+a.create-notebook {
+    font-size: 12px
+}
+
+a.share-note, a.edit-notebook, a.delete-note, a.delete-notebook {
+    color: #fff
+}
+
+.notes .icon-note {
+    background-image: url(../images/sprite_for_ie.png)
+}
+
+.notes .active .icon-note {
+    background-image: url(../images/sprite_for_ie.png)
+}
+
+.notes {
+    font-size: 20px
+}
+
+.notes .title {
+    font-size: 18px
+}
+
+.notes .wordage {
+    font-size: 11px
+}
+
+.notes .abbreviate {
+    font-size: 12px
+}
+
+.notes .time {
+    font-size: 11px
+}
+
+.new-note-link .win-text {
+    font-style: normal;
+    font-size: 12px
+}
+
+.new-note-link .icon {
+    font-size: 12px
+}
+
+.dropdown-menu li, .dropdown-menu li a {
+    font-size: 14px
+}
+
+.main textarea {
+    padding: 0 30px 0 0;
+    word-wrap: break-word;
+    overflow-x: hidden
+}
+
+.main input {
+    font-size: 28px;
+    font-weight: normal
+}
+
+.main .alert .close {
+    top: -2px
+}
+
+.output .left-aside .bottom-block .btn-success {
+    background-image: url(../images/sprite_for_ie.png)
+}
+
+.output .messages-list .opened {
+    background-image: url(../images/sprite_for_ie.png)
+}
