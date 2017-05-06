@@ -8,6 +8,8 @@
 
 @endsection
 
+@section('title', 'beagoodman')
+
 @section('content')
     <div class="container" id="all-container">
 

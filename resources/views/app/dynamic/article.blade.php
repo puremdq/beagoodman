@@ -292,6 +292,8 @@
 
 @endsection
 
+@section('title', $article->article_title)
+
 @section('content')
 
     <div class="note">

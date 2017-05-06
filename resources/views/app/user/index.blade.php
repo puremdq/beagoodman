@@ -65,6 +65,9 @@
     </style>
 @endsection
 
+
+@section('title', $user->username)
+
 @section('content')
 
 

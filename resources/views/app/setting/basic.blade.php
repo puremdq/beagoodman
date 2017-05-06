@@ -5,7 +5,6 @@
     <link href="/css/app.css" rel="stylesheet">
     <link href="http://cdn.bootcss.com/cropper/3.0.0-beta/cropper.min.css" rel="stylesheet">
 
-
     <style>
 
 
@@ -167,6 +166,8 @@
 
     </style>
 @endsection
+
+@section('title', '设置')
 
 <!-- Loading state -->
 @section('content')
