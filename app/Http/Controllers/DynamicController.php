@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use function Couchbase\fastlzCompress;
 use Illuminate\Http\Request;
 use App\Http\Model\Dynamic;
 use App\Http\Model\Mood;
@@ -12,6 +11,7 @@ use App\Http\Model\File as FileTable;
 use Illuminate\Support\Facades\DB;
 
 use App\Lib\AliYunOss;
+use Mockery\Exception;
 
 class DynamicController extends Controller
 {
@@ -127,7 +127,7 @@ class DynamicController extends Controller
             $target = $this->createArticle($data);
 
             $dynamic['target_id'] = $target->article_id;
-            $dynamic['preview'] = $this->getPreview($target->article_content, $data['first_img_url'], $target->article_title,'article');
+            $dynamic['preview'] = $this->getPreview($target->article_content, $data['first_img_url'], $target->article_title, 'article');
 
             $user->article_num = $user->article_num + 1;
 
@@ -149,35 +149,8 @@ class DynamicController extends Controller
     }
 
 
-    /**
-     * 操作动态
-     * @route post
-     * @param $id string 要操作的动态id
-     * @param $request Request 请求
-     * @return mixed
-     */
-    public function handleDynamic($id, Request $request)
-    {
-
-        $action = $request->input('action');
-
-        $actionAllowArr = ['delete'];
-
-        if (!in_array($action, $actionAllowArr)) {
-            return json_encode([
-                    'state' => '1',
-                    'msg' => '非法的操作a'
-
-                ]
-            );
-        }
-
-        return $this->$action($id);
-
-    }
-
     /*删除给定id的动态*/
-    private function delete($id)
+    public function delete($id)
     {
         $state = 0;
         $msg = '';
@@ -235,6 +208,54 @@ class DynamicController extends Controller
         return json_encode(['state' => $state,
                 'msg' => $msg]
         );
+
+    }
+
+
+    /*将给定id的动态浏览次数+1*/
+    public function addViews($id, Request $request)
+    {
+        $redisKey = 'dynamic_' . $id . 'add_read_num';
+
+        $threshold = 100;//设置大于等于多少时 同步到数据库/*TODO 可设为配置项*/
+
+
+        try {
+
+            $addNum = intval($request->input('each_add_num'));//要增加的浏览次数
+            $alreadyHaveAddNum = Redis::exists($redisKey) ? intval(Redis::get($redisKey)) : 0;//已经有的要增加的次数
+            $newAlreadyHaveAddNum = $alreadyHaveAddNum + $addNum;//新的要增加的次数
+
+
+            if ($newAlreadyHaveAddNum >= $threshold) {
+
+                $res = DB::update('update `dynamic` set `read_num` = `read_num`+? where `dynamic_id` = ?', [$threshold, intval($id)]);
+
+                if ($res) {
+
+                    /*存储成功 减去阈值*/
+                    $newAlreadyHaveAddNum = $newAlreadyHaveAddNum - $threshold;
+                }
+
+            }
+
+            Redis::set($redisKey, $newAlreadyHaveAddNum);
+
+            return json_encode([
+
+                'state' => 0
+
+            ]);
+
+        } catch (Exception $e) {
+
+            return json_encode([
+
+                'state' => 1,
+                'msg' => $e->getMessage()
+
+            ]);
+        }
 
     }
 

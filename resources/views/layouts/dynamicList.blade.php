@@ -227,10 +227,10 @@
                     <i class="iconfont ic-zan"></i>
                     <span class="ic-zan-num"></span>
                 </a>
-                <a target="_blank" href="javascript:void(0);">
+                <a class="load-comment" target="_blank" href="javascript:void(0);" is-load="false">
                     <i class="iconfont ic-list-comments"></i>
                     <span class="dynamic-comment-num"></span>
-                    <span class="down1"></span>
+                    <span class="down1 hide"></span>
 
                 </a>
 
@@ -278,7 +278,155 @@
 
 <script>
 
+
     function startShowDynamic(listContainer, userid) {
+
+        var LoadMoreDom = listContainer.children(".load-more");
+        var pageDom = $(listContainer).children(".page");
+
+
+        /*当某个动态在屏幕可视界面停留超过2s 浏览次数+1 */
+
+        /*给定动态id的浏览次数加一*/
+
+
+        setInterval(function autoViewCount() {
+
+            $(listContainer).find(".dynamic").each(function () {
+
+                var thiss = $(this);
+
+                if (isElementInViewport(thiss[0])) {
+                    //printLog(thiss.attr('dynamic-id') + '  in screen');
+
+                    var currentTimestamp = getTimestamp();
+
+                    var lastShowTime;
+
+                    if (thiss.attr('last-show-time') !== undefined) {
+                        lastShowTime = thiss.attr('last-show-time');
+
+                        if (currentTimestamp - lastShowTime >= 1) {
+
+                            //进行了一次浏览
+
+                            var addViewNum;
+                            var eachAddNum = 10;
+
+                            addViewNum = (thiss.attr('add-view-num') !== undefined) ? parseInt(thiss.attr('add-view-num')) : 0;
+                            addViewNum++;
+
+                            if (addViewNum >= eachAddNum) {
+
+                                $.ajax({
+                                    'url': '/dynamic/' + thiss.attr('dynamic-id')+'/addviews',
+                                    'type': 'post',
+                                    'dataType': 'json',
+                                    'data': {
+
+                                        '_token': '{{csrf_token()}}',
+                                        'each_add_num': eachAddNum
+                                    },
+                                    success: function (resp) {
+                                        if (resp.state == 0) {
+                                            thiss.attr('add-view-num', addViewNum - eachAddNum);
+                                        } else {
+
+
+                                            thiss.attr('add-view-num', addViewNum);
+                                            printLog(resp.msg);
+
+                                        }
+                                    }
+                                })
+
+                            } else {
+                                thiss.attr('add-view-num', addViewNum);
+                            }
+
+
+                            //end 进行浏览
+                        }
+
+                    }
+
+                    thiss.attr('last-show-time', currentTimestamp);
+
+                }
+
+            });
+
+        }, 500);
+
+
+        /*下拉到底自动添加*/
+        (function addAutoLoad() {
+
+
+            window.onscroll = function () {
+
+
+                if (!LoadMoreDom.hasClass("hide") && isElementInViewport($(LoadMoreDom)[0])) {
+
+                    if (pageDom.val() <= 10) {
+
+                        LoadMoreDom.html('正在加载...');
+                        LoadMoreDom.click();
+
+                    } else {
+
+                        LoadMoreDom.html('加载更多');
+                    }
+
+                }
+            }
+
+        })();
+
+
+        //                //
+
+
+        $(listContainer).on("click", ".mood .load-comment", function () {
+
+
+            var thiss = $(this);
+            var commentListDom = thiss.parents(".mood").find(".comment-list");
+
+            var down1Dom = thiss.find(".down1");
+
+
+            if (thiss.attr("showing") === undefined || thiss.attr("showing") == 'false') {
+
+
+                if (thiss.attr("is-load") === undefined || thiss.attr("is-load") == 'false') {
+
+                    initComment(commentListDom);
+                    thiss.attr("is-load", 'true');
+
+                }
+
+                thiss.attr("showing", 'true');
+                commentListDom.removeClass('hide');
+                down1Dom.removeClass('hide');
+
+                thiss.unbind();
+
+                startTips(thiss, '收起评论');
+
+
+            } else {
+
+                commentListDom.addClass('hide');
+                down1Dom.addClass('hide');
+                thiss.attr("showing", 'false');
+                thiss.unbind();
+                startTips(thiss, '查看评论', 1);
+
+            }
+
+
+        });
 
 
         $(listContainer).on("click", ".mood-do-like", function () {
@@ -300,18 +448,20 @@
         );
 
 
-        $(listContainer).children(".load-more").on('click', function () {
+        $(LoadMoreDom).on('click', function () {
 
-            var pageDom = $(listContainer).children(".page");
 
             var offsetVal = $(listContainer).children(".offset").val();
             var type = $(listContainer).attr('type');
+
             setDynamicDom(pageDom.val(), offsetVal, type, userid);
             resetNum(pageDom, 'val', 'add');//页码+1
+
 
         }).click();
 
 
+        /*删除动态*/
         $(listContainer).on("click", '.dynamic-del', function () {
 
             if (isLogin() === false) {
@@ -329,12 +479,11 @@
 
                 $.ajax({
 
-                    url: '/dynamic/' + dynamicId,
+                    url: '/dynamic/' + dynamicId + '/delete',
                     type: 'post',
                     dataType: 'json',
                     data: {
-                        '_token': '{{csrf_token()}}',
-                        'action': 'delete'
+                        '_token': '{{csrf_token()}}'
                     },
                     success: function (resp) {
 
@@ -349,7 +498,7 @@
                         }
                     }
 
-                })
+                });
 
                 layer.close(index);
 
@@ -360,6 +509,7 @@
         });
 
 
+        /*关注取消关注*/
         $(listContainer).on('click', ".follow-toggle", function () {
 
             function doFolloToggleAjax(thiss) {
@@ -506,14 +656,12 @@
                 }
 
 
-                $(domSelector).find(".comment-list").attr("target_id", data.dynamic_id);
+                $(domSelector).find(".comment-list").attr("target_id", data.dynamic_id).addClass('hide');
 
                 $(domSelector).find('.comment-num').html(data.comment_num);
-                if (data.comment_num < 1) {
-                    $(domSelector).find(".normal-comment-list").addClass("hide");
-                }
 
-                initComment($(domSelector).find(".comment-list"));
+                startTips($(domSelector).find('.load-comment'), '查看评论', 1);
+
 
             } else if (type == 1) {
                 /*文章*/

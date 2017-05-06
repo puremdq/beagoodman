@@ -328,3 +328,15 @@ function startTips(selector, msg, location) {
 
 
 
+/*查看当前原始是否在屏幕可见范围*/
+function isElementInViewport (el) {
+    var rect = el.getBoundingClientRect();//返回某个元素在视窗中的位置，包括left、right、top、bottom、width、height
+    return(
+        rect.top >= 0 && rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /*or $(window).height() */
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth) /*or $(window).width() */
+    );
+}
+
+
+

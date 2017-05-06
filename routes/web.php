@@ -56,6 +56,8 @@ Route::get('/dynamic/{id}', 'DynamicController@show');    //动态 dynamic
 
 Route::get('/comment', 'CommentController@index');
 
+Route::post('/dynamic/{id}/addviews', 'DynamicController@addViews');    //添加浏览次数
+
 
 Route::group(['middleware' => 'auth'], function () {
 
@@ -87,7 +89,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/upload', 'UploadController@index');
 
     Route::post('/dynamic', 'DynamicController@store');    //存储动态
-    Route::post('/dynamic/{id}', 'DynamicController@handleDynamic');    //操作动态(如删除)
+    Route::post('/dynamic/{id}/delete', 'DynamicController@delete');    //操作动态(如删除)
 
     Route::post('/u/toggle_follow', 'UserRelationController@toggleFollow'); //关注 或取消关注
 
