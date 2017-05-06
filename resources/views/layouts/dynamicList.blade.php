@@ -285,12 +285,9 @@
         var pageDom = $(listContainer).children(".page");
 
 
-        /*当某个动态在屏幕可视界面停留超过2s 浏览次数+1 */
 
-        /*给定动态id的浏览次数加一*/
-
-
-        setInterval(function autoViewCount() {
+        /*自动更新浏览次数*/
+        function autoViewCount() {
 
             $(listContainer).find(".dynamic").each(function () {
 
@@ -306,12 +303,12 @@
                     if (thiss.attr('last-show-time') !== undefined) {
                         lastShowTime = thiss.attr('last-show-time');
 
-                        if (currentTimestamp - lastShowTime >= 1) {
+                        if (currentTimestamp - lastShowTime >= 2) {
 
                             //进行了一次浏览
 
                             var addViewNum;
-                            var eachAddNum = 10;
+                            var eachAddNum = 3;
 
                             addViewNum = (thiss.attr('add-view-num') !== undefined) ? parseInt(thiss.attr('add-view-num')) : 0;
                             addViewNum++;
@@ -319,7 +316,7 @@
                             if (addViewNum >= eachAddNum) {
 
                                 $.ajax({
-                                    'url': '/dynamic/' + thiss.attr('dynamic-id')+'/addviews',
+                                    'url': '/dynamic/' + thiss.attr('dynamic-id') + '/addviews',
                                     'type': 'post',
                                     'dataType': 'json',
                                     'data': {
@@ -356,7 +353,7 @@
 
             });
 
-        }, 500);
+        }
 
 
         /*下拉到底自动添加*/
@@ -379,6 +376,9 @@
                     }
 
                 }
+
+
+                autoViewCount();
             }
 
         })();

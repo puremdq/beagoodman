@@ -217,7 +217,7 @@ class DynamicController extends Controller
     {
         $redisKey = 'dynamic_' . $id . 'add_read_num';
 
-        $threshold = 100;//设置大于等于多少时 同步到数据库/*TODO 可设为配置项*/
+        $threshold = 10;//设置大于等于多少时 同步到数据库/*TODO 可设为配置项*/
 
 
         try {
