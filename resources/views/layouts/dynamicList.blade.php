@@ -3,6 +3,11 @@
 
         background-color: #f1f6ff;
         padding: 10px 15px;
+        width: 100%;
+    }
+
+    .dynamic .content {
+        width: 100%;
     }
 
     .img-box .mood-imgs img {
@@ -92,61 +97,33 @@
 
     }
 
+    .have-img .dynamic-show .abstract {
+
+        width: 65%;
+        margin-right: 5%;
+
+    }
+
+    .have-img .dynamic-show .wrap-img {
+
+        display: inline-block;
+        height: 150px;
+        width: 30%;
+    }
+
+    .note-list .have-img .wrap-img img {
+        width: 100%;
+        height: 100%;
+        border-radius: 4px;
+        border: 1px solid #f0f0f0
+    }
+
 </style>
 
 <div class="for-dynamic-clone hide">
 
     <li class="article dynamic">
 
-        <div class="content">
-
-            <div class="author">
-                <a class="avatar" target="_blank" href="#">
-                    <img alt="作者头像"/>
-                </a>
-                <div class="name">
-                    <a class="blue-link" target="_blank"></a>
-                    <span class="time"></span>
-                </div>
-
-                <div class="user-op btn-group pull-right">
-                    <button type="button" class="btn btn-ls btn-info dropdown-toggle" data-toggle="dropdown">
-                        <span class="glyphicon glyphicon glyphicon-menu-down"></span>
-                    </button>
-
-                    <ul class="dropdown-menu user-op-ul">
-                        <li><a class="dynamic-del hide" href="javascript:void(0);">删除</a></li>
-                        <li><a class="follow-toggle" href="javascript:void(0);">关注/取消关注</a></li>
-                        {{--<li><a href="javascript:void(0);">加入黑名单</a></li>--}}
-                    </ul>
-                </div>
-
-            </div>
-
-            <a class="title" target="_blank"></a>
-            <p class="abstract">
-            </p>
-
-            <div class="meta">{{--相关信息--}}
-                <span>
-                    <i class="iconfont ic-list-read"></i>
-                    <span class="ic-read-num"></span>
-                </span>
-
-                <span>
-                    <i class="iconfont ic-zan"></i>
-                    <span class="ic-zan-num"></span>
-                </span>
-
-                <a target="_blank" class="get-comment">
-                    <i class="iconfont ic-list-comments"></i>
-                    <span class="dynamic-comment-num"></span>
-                </a>
-            </div>
-        </div>
-    </li>
-
-    <li class="mood dynamic">
 
         <div class="content">
 
@@ -172,6 +149,62 @@
                     </ul>
                 </div>
 
+
+            </div>
+
+            <a class="title" target="_blank"></a>
+
+            <div class="dynamic-show">
+                <p class="abstract" style="display: inline-block">
+
+
+            </div>
+            </p>
+
+            <div class="meta">{{--相关信息--}}
+                <span>
+                    <i class="iconfont ic-list-read"></i>
+                    <span class="ic-read-num"></span>
+                </span>
+
+                <span>
+                    <i class="iconfont ic-zan"></i>
+                    <span class="ic-zan-num"></span>
+                </span>
+
+                <a target="_blank" class="get-comment">
+                    <i class="iconfont ic-list-comments"></i>
+                    <span class="dynamic-comment-num"></span>
+                </a>
+            </div>
+        </div>
+    </li>
+
+    <li class="mood dynamic">
+
+
+        <div class="content">
+
+            <div class="author">
+                <a class="avatar" target="_blank" href="#">
+                    <img alt="作者头像"/>
+                </a>
+                <div class="name">
+                    <a class="blue-link" target="_blank"></a>
+                    <span class="time"></span>
+                </div>
+
+                <div class="user-op btn-group pull-right">
+                    <button type="button" class="btn btn-ls btn-info dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon glyphicon-menu-down"></span>
+                    </button>
+
+                    <ul class="dropdown-menu user-op-ul">
+                        <li><a class="dynamic-del hide" href="javascript:void(0);">删除</a></li>
+                        <li><a class="follow-toggle" href="javascript:void(0);">关注/取消关注</a></li>
+                        {{-- <li><a href="javascript:void(0);">加入黑名单</a></li>--}}
+                    </ul>
+                </div>
 
             </div>
 
@@ -237,6 +270,8 @@
 
                 </div>
             </div>
+
+
         </div>
     </li>
 </div>
@@ -491,8 +526,8 @@
                         '<img src="' + src + '">' +
                         ' </a>';
 
-                    $(domSelector).addClass('have-img')
-                        .prepend(innerHtml);
+                    $(domSelector).addClass('have-img').find('.dynamic-show')
+                        .append(innerHtml);
 
                     /*  */
                 }

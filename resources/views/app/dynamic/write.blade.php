@@ -78,7 +78,7 @@
 <div class="nav">
 
     <div style="float: left">
-        <a class="logo" href="{{url('')}}">AGoodMan</a>
+        <a class="logo" href="{{url('')}}">beagoodman</a>
         <span style="margin-left: 10px;color: #bd3a55;">新文章</span>
     </div>
 
@@ -103,7 +103,7 @@
         <textarea hidden name="article_content" id="article_content"></textarea>
 
 
-        <div id="div1" style="height: 600px">
+        <div id="div1" style="height: 650px">
             <p>请输入内容...</p>
         </div>
     </form>
