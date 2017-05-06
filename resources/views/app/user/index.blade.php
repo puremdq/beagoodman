@@ -79,7 +79,7 @@
                     <input class="current-userid" hidden value="{{$user->user_id}}">
 
                     <a class="avatar main-avatar" href="/u/{{$user->user_id}}">
-                        <img src="{{url('getfile')}}?key={{$user->avatar_key}}" alt="头像"/>
+                        <img src="{{env('imgUrl')}}/{{$user->avatar_key}}" alt="头像"/>
                     </a>
 
 
