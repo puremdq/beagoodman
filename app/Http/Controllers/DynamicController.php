@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use function Couchbase\fastlzCompress;
 use Illuminate\Http\Request;
 use App\Http\Model\Dynamic;
 use App\Http\Model\Mood;
@@ -126,7 +127,7 @@ class DynamicController extends Controller
             $target = $this->createArticle($data);
 
             $dynamic['target_id'] = $target->article_id;
-            $dynamic['preview'] = $this->getPreview($target->article_content, $target['img_keys'], $target->article_title);
+            $dynamic['preview'] = $this->getPreview($target->article_content, $data['first_img_url'], $target->article_title,'article');
 
             $user->article_num = $user->article_num + 1;
 
@@ -138,11 +139,9 @@ class DynamicController extends Controller
             return back(405)->with('tips', '非法的操作');
         }
 
-
         $dynamic['published_time'] = time();
         Dynamic::create($dynamic);
         $user->save();
-
         session(['user' => $user]);
         session()->flash('tips', '发表成功');
         session()->flash('state', 1);
@@ -290,10 +289,6 @@ class DynamicController extends Controller
 
             if ($newImgKeys === false) {
                 return false;
-            } else {
-
-                $article['img_keys'] = $newImgKeys;
-
             }
 
         }
@@ -357,12 +352,21 @@ class DynamicController extends Controller
     /**
      * 得到预览
      * @param string $content 要生成预览的内容
-     * @param string $imgKeys 可能包含的图片
+     * @param string $imgKeysOrUrl 可能包含的图片的key值或url
      * @param string $title 如果存在的标题
-     * @return string serialize操作后的结果
+     * @param string $type 要创建Preview的类型  如('mood'  'article')
+     * @return mixed serialize操作后的结果
      * */
-    private function getPreview($content, $imgKeys = null, $title = null)
+    private function getPreview($content, $imgKeysOrUrl = null, $title = null, $type = 'mood')
     {
+
+        $typeAllow = ['mood', 'article', 'forward'];
+
+
+        if (!in_array($type, $typeAllow)) {
+            return false;
+        }
+
 
         $preview = array();
         $content = strip_tags($content);
@@ -375,9 +379,14 @@ class DynamicController extends Controller
         }
 
 
-        if (!empty($imgKeys)) {
+        if (!empty($imgKeysOrUrl)) {
 
-            $preview['img_keys'] = $imgKeys;
+            if ($type == 'mood') {
+                $preview['img_keys'] = $imgKeysOrUrl;
+
+            } else {
+                $preview['first_img_url'] = $imgKeysOrUrl;
+            }
 
         }
 

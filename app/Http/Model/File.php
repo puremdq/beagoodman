@@ -11,7 +11,7 @@ class File extends Model
     protected $table = 'file';
     protected $primaryKey = 'file_key';
 
-    protected $fillable = ['file_key','file_path'];
+    protected $fillable = ['file_key','file_url'];
     public $timestamps = false;
 
 

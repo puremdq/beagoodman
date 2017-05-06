@@ -233,7 +233,7 @@ function analyticTargetEmotion(selector) {
 }
 /*截取字符串 从 某个 字符第一次出现 后一个字符 到字符串结束*/
 function getAfterStr(str, separator) {
-    return str.substring(str.indexOf(separator) + 1);//得到id
+    return str.substring(str.indexOf(separator) + separator.length);//得到id
 }
 
 

@@ -484,10 +484,9 @@
                 /*文章*/
 
 
-                if (preview.img_keys !== undefined) {
-                    var imgKeysArr = preview.img_keys.split("|");
+                if (preview.first_img_url !== undefined) {
 
-                    var src = '{{env('imgUrl')}}/' + imgKeysArr[0];
+                    var src = preview.first_img_url;
                     var innerHtml = '<a class="wrap-img" href="' + src + '" target="_blank">' +
                         '<img src="' + src + '">' +
                         ' </a>';

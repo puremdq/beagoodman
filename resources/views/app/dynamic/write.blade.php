@@ -96,6 +96,7 @@
         {{csrf_field()}}
         <input type="text" hidden name="dynamic_type" value="article">
         <input type="text" hidden name="img_keys" id="img_keys">
+        <input type="text" hidden id="first_img_url" name="first_img_url" value="">
 
 
         <input id="title" type="text" name="article_title" placeholder="请输入标题">
@@ -119,155 +120,179 @@
 
 <!--这里引用jquery和wangEditor.js-->
 <script type="text/javascript">
-    var editor = new wangEditor('div1');
-    var img_keys = $("#img_keys");
 
-    editor.config.menus = $.map(wangEditor.config.menus, function (item, key) {
-        if (item === 'video' || item === 'location') {
-            return null;
-        }
-
-        return item;
-    });
+    (function () {
 
 
-    editor.config.emotions = {
-        // 支持多组表情
-        // 第一组，id叫做 'default'
-        'default': {
-            title: '默认',  // 组名称
-            data: 'http://www.wangeditor.com/wangEditor/test/emotions.data'  // 服务器的一个json文件url，例如官网这里配置的是 http://www.wangeditor.com/wangEditor/test/emotions.data
-        }
+        var editor = new wangEditor('div1');
 
-
-    };
-
-
-    // 上传图片（举例）
-    editor.config.uploadImgUrl = '/upload';
-
-    // 配置自定义参数（举例）
-    editor.config.uploadParams = {
-
-        'inputName': 'wangEditorImg',
-        'action': 'dynamicImgUpload',
-        'key': randomString(32),
-        '_token': '{{csrf_token()}}'
-    };
-    editor.config.uploadImgFileName = 'wangEditorImg';
-    editor.config.uploadImgFns.onload = function (responseData, xhr) {
-        // resultText 服务器端返回的text
-        // xhr 是 xmlHttpRequest 对象，IE8、9中不支持
-        var data;
-        try {
-            data = $.parseJSON(responseData);
-            //console.log(data);
-        } catch (err) {
-            data = responseData;
-        }
-        if (data.state == 0) {
-            // 上传图片时，已经将图片的名字存在 editor.uploadImgOriginalName
-            var originalName = editor.uploadImgOriginalName || '';
-            var key = data.key;
-
-            var value = img_keys.val();
-
-            if (value.length >= 1) {
-                value = value + '|' + key
-            } else {
-                value = key;
+        editor.config.menus = $.map(wangEditor.config.menus, function (item, key) {
+            if (item === 'video' || item === 'location') {
+                return null;
             }
-            img_keys.val(value);
-            //console.log(data.key);
-            // 如果 resultText 是图片的url地址，可以这样插入图片：
-            editor.command(null, 'insertHtml', '<img src="' + data.url + '" alt="' + originalName + '" style="max-width:100%;"/>');
 
-        } else {
+            return item;
+        });
 
-            alert('上传失败' + data.msg);
-        }
-
-        this.config.uploadParams.key = randomString(32);
-
-    };
-
-    // 设置 headers（举例）
-    editor.config.uploadHeaders = {
-        'Accept': 'text/x-json'
-    };
+        editor.config.emotions = {
+            // 支持多组表情
+            // 第一组，id叫做 'default'
+            'default': {
+                title: '默认',  // 组名称
+                data: 'http://www.wangeditor.com/wangEditor/test/emotions.data'  // 服务器的一个json文件url，例如官网这里配置的是 http://www.wangeditor.com/wangEditor/test/emotions.data
+            }
 
 
-    editor.create();
-</script>
+        };
 
-<script>
-    var subBtn = $("#sub_btn");
-    var clearBtn = $("#clear_btn");
-    var title = $("#title");
+        // 上传图片（举例）
+        editor.config.uploadImgUrl = '/upload';
+        editor.config.printLog = false;
 
-    subBtn.click(function () {
+        // 配置自定义参数（举例）
+        editor.config.uploadParams = {
 
-        var html = editor.$txt.html();          // 获取容
-        var text = editor.$txt.text();          //获取纯文本
-        var titleVal = title.val();
+            'inputName': 'wangEditorImg',
+            'action': 'dynamicImgUpload',
+            'key': randomString(32),
+            '_token': '{{csrf_token()}}'
+        };
+        editor.config.uploadImgFileName = 'wangEditorImg';
+        editor.config.uploadImgFns.onload = function (responseData, xhr) {
+            // resultText 服务器端返回的text
+            // xhr 是 xmlHttpRequest 对象，IE8、9中不支持
+            var data;
+            try {
+                data = $.parseJSON(responseData);
+                //console.log(data);
+            } catch (err) {
+                data = responseData;
+            }
+            if (data.state == 0) {
+                // 上传图片时，已经将图片的名字存在 editor.uploadImgOriginalName
+                var originalName = editor.uploadImgOriginalName || '';
 
-        var titleLength = getObjLength(titleVal);
-        var textLength = getObjLength(text);
+                //console.log(data.key);
+                // 如果 resultText 是图片的url地址，可以这样插入图片：
+                editor.command(null, 'insertHtml', '<img src="' + data.url + '" alt="' + originalName + '" style="max-width:100%;"/>');
 
-        if (titleLength > 35) {
+            } else {
 
-            layer.msg('标题太长啦,人家不要嘛', {icon: 5});
-            return 0;
+                alert('上传失败' + data.msg);
+            }
 
-        } else if (titleLength < 3) {
+            this.config.uploadParams.key = randomString(32);
 
-            layer.msg('老师说标题至少要3个字符哦', {icon: 5});
-            return 0;
-        }
+        };
 
-        if (getObjLength(title) > 35) {
+        editor.onchange = function () {
+            // 编辑区域内容变化时，实时打印出当前内容
 
-            layer.msg('标题太长啦,人家不要嘛', {icon: 5});
-            return 0;
+            var imgDoms = this.$txt.find('img');
+            var imgKeys = '';
 
-        }
+            for (var i = 0; i < imgDoms.length; i++) {
 
-        if (textLength < 20) {
+                var currentImgDom = $(imgDoms[i]);
+                var currentUrl = currentImgDom.attr('src');
 
-            layer.msg('再多写写哦,20个字符都不到诶', {icon: 5});
-            return 0;
+                if (i === 0) {
+                    //printLog(currentUrl);
+                    $("#first_img_url").val(currentUrl);
+                }
 
-        }
+                if (currentUrl.indexOf("getfile?key=") >= 0) {
+                    //包含
+                    imgKeys = imgKeys + getAfterStr(currentUrl, 'getfile?key=') + '|';
 
-        if (textLength > 3500) {
+                }
+            }
 
-            layer.msg('你写得太多了哦', {icon: 5});
-            return 0;
-        }
+            if (imgKeys.length > 0) {
+                imgKeys = imgKeys.substr(0, imgKeys.length - 1);
 
-        $("#article_content").val(html);
-        $("#article_form").submit();
+            }
+            $("#img_keys").val(imgKeys);
 
-    });
+            //printLog(imgKeys);
+        };
+
+        // 设置 headers（举例）
+        editor.config.uploadHeaders = {
+            'Accept': 'text/x-json'
+        };
+
+        editor.create();
 
 
-    clearBtn.click(function () {
 
-        layer.confirm('你确定要清空么?', {
-            btn: ['是的', '不要'] //按钮
-        }, function () {
-            editor.$txt.html('<p><br></p>');
-            layer.closeAll('dialog');
-        }, function () {
+
+
+        $("#sub_btn").click(function () {
+
+            var html = editor.$txt.html();          // 获取容
+            var text = editor.$txt.text();          //获取纯文本
+            var titleVal = $("#title").val();
+
+            var titleLength = getObjLength(titleVal);
+            var textLength = getObjLength(text);
+
+            if (titleLength > 35) {
+
+                layer.msg('标题太长啦,人家不要嘛', {icon: 5});
+                return false;
+
+            } else if (titleLength < 3) {
+
+                layer.msg('老师说标题至少要3个字符哦', {icon: 5});
+                return false;
+            }
+
+
+            if (textLength < 20) {
+
+                layer.msg('再多写写哦,20个字符都不到诶', {icon: 5});
+                return false;
+
+            }
+
+            if (textLength > 3500) {
+
+                layer.msg('你写得太多了哦', {icon: 5});
+                return false;
+            }
+
+            $("#article_content").val(html);
+            $("#article_form").submit();
 
         });
 
-    });
+        $("#clear_btn").click(function () {
 
-    $("#div1").one('click', function () {
+            layer.confirm('你确定要清空么?', {
+                btn: ['是的', '不要'] //按钮
+            }, function (index) {
+                editor.$txt.html('<p><br></p>');
+                layer.closeAll(index);
+            }, function () {
 
-        editor.$txt.html('<p><br></p>');
+            });
 
-    });
+        });
+
+
+        $("#div1").one('click', function () {
+
+            if (getObjLength($("#img_keys").val()) < 1) {
+                editor.$txt.html('<p><br></p>');
+            }
+
+        });
+
+
+
+    })();
+
 </script>
+
 </html>

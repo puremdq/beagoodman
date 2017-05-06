@@ -104,8 +104,11 @@
 
     <div style="margin-top: 5px">
         <div style="float: left">
-            <input type="button" id="active_emoji" value="biaoqin">
-            <input type="button" id="active_img" value="img">
+
+            <a id="active_emoji" href="javascript:void(0);" style="margin-right: 15px;text-decoration: none">
+                <i class="iconfont ic-comment-emotions"></i>
+            </a>
+            <input type="button" class="btn btn-success btn-xs" id="active_img" value="添加图片">
         </div>
 
         <div style="float: right">
