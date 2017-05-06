@@ -404,7 +404,7 @@
 
             $(domSelector).attr('id', 'dynamic-' + data.dynamic_id);
             $(domSelector).attr('dynamic-id', data.dynamic_id);
-            $(domSelector).find(".avatar").attr('href', '/u/' + data.user_id).find("img").attr('src', '/getfile?key=' + data.avatar_key);
+            $(domSelector).find(".avatar").attr('href', '/u/' + data.user_id).find("img").attr('src', '{{env('imgUrl')}}/' + data.avatar_key);
 
             $(domSelector).find('.blue-link').html(data.username).attr('href', '/u/' + data.user_id);
             analyticShowTime($(domSelector).find('.time').attr('data-shared-at', data.published_time));

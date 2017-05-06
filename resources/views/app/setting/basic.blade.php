@@ -246,7 +246,7 @@
                             <td class="top-line">
                                 <div class="avatar">
                                     <img id="show-avatar"
-                                         src="{{url('/getfile')}}?key={{$data->avatar_key}}">
+                                         src="{{env('imgUrl')}}/{{$data->avatar_key}}">
                                 </div>
                             </td>
                             <td class="top-line">

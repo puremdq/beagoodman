@@ -7,7 +7,7 @@
         <div>
             <div class="author">
                 <a href="#" target="_blank" class="avatar">
-                    <img @if(!empty(session('user'))) src="{{url('/getfile')}}?key={{session('user')->avatar_key}}" @endif>
+                    <img @if(!empty(session('user'))) src="{{url(env('imgUrl'))}}/{{session('user')->avatar_key}}" @endif>
                 </a>
 
                 <div class="info">
@@ -130,7 +130,7 @@
                 <input hidden name="comment_pid" value="0">
 
                 <a class="avatar" href="/u/{{session('user')->user_id}}">
-                    <img src="{{url('getfile')}}?key={{session('user')->avatar_key}}">
+                    <img src="{{env('imgUrl')}}/{{session('user')->avatar_key}}">
                 </a>
 
                 <div class="form-group has-feedback">
@@ -416,7 +416,7 @@
                 var likeNum = commentsPlaceholder.find('.like-num');//点赞数
                 var replyNum = commentsPlaceholder.find('.reply-num');//回复数
 
-                avatar.children("img").attr('src', "{{url('getfile')}}?key=" + data.avatar_key);
+                avatar.children("img").attr('src', "{{env('imgUrl')}}/" + data.avatar_key);
                 avatar.attr('href', "{{url('u')}}/" + data.user_id);
                 commentsPlaceholder.find('.name').html(data.username).attr('href', "{{url('u')}}/" + data.user_id);
                 commentsPlaceholder.find('.time').attr('data-shared-at', data.comment_time);
@@ -669,7 +669,6 @@
 
         /*删除*/
         $(normalCommentList).on('click', '.tool-group-wrapper .del', function () {
-
 
 
             var thiss = $(this);

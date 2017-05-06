@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Lib\AliYunOss;
 use Illuminate\Http\Request;
 use App\Lib\FileUpload;
 use App\Http\Model\File;
@@ -94,17 +95,14 @@ class SettingController extends Controller
     {
         $state = 0;
         $msg = '修改成功';
-        $key = $data['key'];
-        $res = $this->avatarUpload($key, $data['inputName']);
+        $newKey = $this->avatarUpload($data['inputName']);
 
-        if ($res) {
+        if ($newKey) {
 
             $user = session('user');
-            $user->avatar_key = $key;
-
+            $user->avatar_key = $newKey;
 
             if (!$user->save()) {
-                $res->delete();
                 $state = 1;
                 $msg = '头像修改失败';
             }
@@ -115,52 +113,38 @@ class SettingController extends Controller
             $msg = '文件上传失败';
         }
 
-
-        return json_encode(['state' => $state, 'msg' => $msg, 'url' => url('getfile') . '?key=' . $key]);
-
+        return json_encode(['state' => $state, 'msg' => $msg, 'url' => env('imgUrl') . '/' . $newKey]);
 
     }
 
 
     /**
      * avatarUpload
-     * @param string $key 图片的key
      * @param string $inputName 文件的inputName
-     * @return mixed 成功返回创建的对象 不成功false;
+     * @return mixed 成功返回创建的对象的key值 不成功false;
      **/
-    private function avatarUpload($key, $inputName)
+    private function avatarUpload($inputName)
     {
         // $diskInstance=Storage::disk('avatar');
 
         //$redis->set("list", "a", "ex", "10");
-        $uploadPath = config('filesystems.disks.avatar.url');
-        $fileUpload = new FileUpload($inputName, ['storeDriver' => 'tradition', 'uploadPath' => $uploadPath]);
+
+        //AliYunOss::(env(''))
+
+        $aliYunOss = AliYunOss::getOssClient();
+
+        $fileUpload = new FileUpload($inputName, ['storeDriver' => 'aliYunOss', 'bucket' => env('bucket')], $aliYunOss);
         $fileUpload->initialize();
-        $res = $fileUpload->execute();
 
-        if ($res) {
+        if ($fileUpload->initialize()) {
 
-            $filePath = $uploadPath . '/' . $fileUpload->getVariable('newFileName');
-            $file = File::create(['file_key' => $key, 'file_path' => $filePath]);
-            //return back()->with('errorsToAlert', $fileUpload->getErrorMessage());
+            if ($fileUpload->execute()) {
 
-
-            if ($file) {
-
-                return $file;
-
-            } else {
-
-                unlink($filePath);
-                return false;
+                $newKey = $fileUpload->getVariable('newFileName');
+                return $newKey;
             }
 
-
-        } else {
-
-
-            return false;
-
         }
+        return false;
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Lib;
 
+use Mockery\Exception;
+
 /**@author puremdq
  * @email puremdq@gmail.com
  * @file: FileUpload.class.php 文件上传类FileUpload
@@ -16,7 +18,7 @@ class FileUpload
         'isRandName' => true,                      //设置是否随机重命名文件， false 则为原文件名
         'interrupt' => false,                        //出现错误时  是否终止操作
 
-        'allowStoreDriver' => array('tradition', 'redis'),// 允许的存储方式
+        'allowStoreDriver' => array('tradition', 'redis', 'aliYunOss'),// 允许的存储方式
         'storeDriver' => 'disk',              //存储方式  disk 存储到磁盘  redis存储到 redis
 
         'uploadPath' => './uploads/',        //上传文件保存的路径
@@ -172,9 +174,8 @@ class FileUpload
 
     /**
      * 执行上传操作
-     * @return mixed 错误返回false 成功则返回文件存储的新的绝对路径
+     * @return boolean 是否成功
      */
-
     public function execute()
     {
 
@@ -272,13 +273,42 @@ class FileUpload
                 break;
 
 
+            case 'aliYunOss':
+
+
+                if ($this->driverObj === null) {
+                    $this->setVariable('errorCode', 9, $i);
+                    $this->setVariable('errorMessage', '未找到阿里云oss驱动', $i);
+                    return false;
+                }
+
+                $ossClient = $this->driverObj;
+                $bucket = $this->getConfig('bucket');
+
+                try {
+
+                    $ossClient->uploadFile($bucket, $this->getNewFileName($i), $this->getVariable('tmpFileName', $i));
+                    return true;
+                } catch (Exception $e) {
+
+                    $this->setVariable('errorCode', 11, $i);
+                    $this->setVariable('errorMessage', $e->getMessage(), $i);
+                    return false;
+                }
+
+                break;
+
+
             case 'redis':
 
-                $redis = $this->driverObj;
-                if ($redis === null) {
+                if ($this->driverObj === null) {
                     $this->setVariable('errorCode', 9, $i);
                     $this->setVariable('errorMessage', '未找到redis驱动', $i);
+                    return false;
+
                 }
+
+                $redis = $this->driverObj;
 
                 $data = file_get_contents($tmpFileName);
                 $redisKey = $this->getConfig('redisKey');
