@@ -133,14 +133,16 @@ class SettingController extends Controller
 
         $aliYunOss = AliYunOss::getOssClient();
 
-        $fileUpload = new FileUpload($inputName, ['storeDriver' => 'aliYunOss', 'bucket' => env('bucket')], $aliYunOss);
+        $uploadPath = 'avatar/';
+
+        $fileUpload = new FileUpload($inputName, ['storeDriver' => 'aliYunOss', 'uploadPath' => $uploadPath, 'bucket' => env('bucket')], $aliYunOss);
         $fileUpload->initialize();
 
         if ($fileUpload->initialize()) {
 
             if ($fileUpload->execute()) {
 
-                $newKey = $fileUpload->getVariable('newFileName');
+                $newKey = $uploadPath . $fileUpload->getVariable('newFileName');
                 return $newKey;
             }
 

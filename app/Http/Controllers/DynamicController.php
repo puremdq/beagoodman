@@ -7,8 +7,7 @@ use App\Http\Model\Dynamic;
 use App\Http\Model\Mood;
 use App\Http\Model\Article;
 use Illuminate\Support\Facades\Redis;
-use Illuminate\Support\Facades\Storage;
-use App\Http\Model\File;
+use App\Http\Model\File as FileTable;
 use Illuminate\Support\Facades\DB;
 
 use App\Lib\AliYunOss;
@@ -127,7 +126,7 @@ class DynamicController extends Controller
             $target = $this->createArticle($data);
 
             $dynamic['target_id'] = $target->article_id;
-            $dynamic['preview'] = $this->getPreview($target->article_content, $data['img_keys'], $target->article_title);
+            $dynamic['preview'] = $this->getPreview($target->article_content, $target['img_keys'], $target->article_title);
 
             $user->article_num = $user->article_num + 1;
 
@@ -141,16 +140,13 @@ class DynamicController extends Controller
 
 
         $dynamic['published_time'] = time();
-
         Dynamic::create($dynamic);
         $user->save();
 
         session(['user' => $user]);
         session()->flash('tips', '发表成功');
         session()->flash('state', 1);
-
-        return redirect(url(''));
-
+        return redirect(url('/'));
     }
 
 
@@ -258,7 +254,6 @@ class DynamicController extends Controller
 
         if ($data['img_keys'] != null) {
 
-            $mood['img_keys'] = $data['img_keys'];
             //有上传图片
             $imgKeys = explode('|', $data['img_keys']);
 
@@ -285,16 +280,22 @@ class DynamicController extends Controller
     {
 
         $article = [];
-        $files = [];
 
         if ($data['img_keys'] != null) {
 
             //有上传图片
             $imgKeys = explode('|', $data['img_keys']);
 
-            if ($this->storeImg($imgKeys) === false) {
+            $newImgKeys = $this->storeImg($imgKeys, true);
+
+            if ($newImgKeys === false) {
                 return false;
+            } else {
+
+                $article['img_keys'] = $newImgKeys;
+
             }
+
         }
 
         $article['article_title'] = $data['article_title'];
@@ -309,30 +310,46 @@ class DynamicController extends Controller
     /**
      * 储存图片
      * @param array $imgKeys 在redis的key的数组
+     * @param boolean $isCreateFile 是否创建 在file表中插入记录 建立对应关系
      * @return mixed
      * */
-    private function storeImg($imgKeys)
+    private function storeImg($imgKeys, $isCreateFile = false)
     {
         //有上传图片
 
         $newImgKeys = '';
+
+        $path = 'dynamic/';
 
         foreach ($imgKeys as $imgKey) {
 
             $img = Redis::lrange($imgKey, 0, -1);
             $imgName = Redis::lrange($imgKey . "_name", 0, -1);
             $img = $img[0];
-            $imgName = $imgName[0];
+            $imgName = $path . $imgName[0];
 
             $res = AliYunOss::putObject('puremdq', $imgName, $img);
 
             if (!$res) {
                 return false;
             } else {
+
+                if ($isCreateFile) {
+
+                    $fileData = [
+                        'file_key' => $imgKey,
+                        'file_url' => env('imgUrl') . '/' . $imgName,
+                    ];
+
+                    if (!FileTable::create($fileData)) {
+                        return false;
+                    }
+                }
+
                 $newImgKeys = $newImgKeys . $imgName . '|';
             }
-
         }
+
         return substr($newImgKeys, 0, -1);
     }
 

@@ -57,9 +57,7 @@ class AssistController extends Controller
 
                     $file = File::where('file_key', $key)->firstOrFail();
 
-
-                    return redirect(url($file->file_path));
-
+                    return redirect(url($file->file_url));
 
                 } catch (\Exception $findException) {
 

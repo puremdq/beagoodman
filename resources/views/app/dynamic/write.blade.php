@@ -239,7 +239,7 @@
 
         }
 
-        if (textLength > 2000) {
+        if (textLength > 3500) {
 
             layer.msg('你写得太多了哦', {icon: 5});
             return 0;

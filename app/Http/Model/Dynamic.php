@@ -32,7 +32,6 @@ class Dynamic extends Model
     public function author()
     {
 
-
         return $this->hasOne('App\Http\Model\User', 'user_id', 'user_id');
 
     }

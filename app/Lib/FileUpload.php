@@ -287,7 +287,8 @@ class FileUpload
 
                 try {
 
-                    $ossClient->uploadFile($bucket, $this->getNewFileName($i), $this->getVariable('tmpFileName', $i));
+                    $uploadPath = $this->getConfig('uploadPath');
+                    $ossClient->uploadFile($bucket, $uploadPath . $this->getNewFileName($i), $this->getVariable('tmpFileName', $i));
                     return true;
                 } catch (Exception $e) {
 
@@ -485,7 +486,6 @@ class FileUpload
                     return $errorMessage;
                 }
 
-
             } else {
 
                 return '';
@@ -494,7 +494,6 @@ class FileUpload
         }
 
     }
-
 
     /**
      * 得到变量值

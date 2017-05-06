@@ -302,18 +302,18 @@
                 <h1 class="title">{{$article->article_title}}</h1>
 
 
-            <?php $user = $dynamic->author  ?>
+            <?php $user = $dynamic->author;  $avatarUrl = env('imgUrl') . '/' . $user->avatar_key; ?>
             <!-- 作者区域 -->
                 <div class="author">
                     <a class="avatar" href="/u/{{$user->user_id}}">
-                        <img src="{{url('/getfile')}}?key={{$user->avatar_key}}" alt="用户头像"/>
+                        <img src="{{$avatarUrl}}" alt="用户头像"/>
                     </a>
                     <div class="info">
                         <span class="tag">作者</span>
                         <span class="name"><a href="/u/{{$user->user_id}}">{{$user->username}}</a></span>
                         <!-- 关注用户按钮 -->
 
-                        @if(empty(session('user'))||$user->user_id!=session('user')->user_id)
+                        @if(empty(session('user'))||$user->user_id!=session('user_id'))
 
 
                             <div class="following-group" user-id="{{$user->user_id}}" style="display: inline-block">
@@ -392,7 +392,7 @@
             <div class="follow-detail">
                 <div class="info">
                     <a class="avatar" href="/u/{{$dynamic->author->user_id}}">
-                        <img src="{{url('/getfile')}}?key={{$dynamic->author->avatar_key}}" alt="头像">
+                        <img src="{{$avatarUrl}}" alt="头像">
                     </a>
 
                     @if(empty(session('user'))||$user->user_id!=session('user')->user_id)
