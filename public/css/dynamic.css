@@ -1,0 +1,115 @@
+li.dynamic {
+
+    background-color: #f1f6ff;
+    padding: 10px 15px;
+    width: 100%;
+}
+.dynamic .content {
+    width: 100%;
+}
+#list-container .dynamic .meta {
+
+    margin-top: 15px;
+    font-size: 15px;
+}
+.img-box .mood-imgs img {
+
+    width: 100%;
+    height: 110px;
+
+}
+.img-box .mood-imgs {
+
+    padding: 0;
+}
+.meta a {
+
+    text-decoration: none;
+}
+.img-box .mood-imgs li {
+    cursor: zoom-in;
+    display: inline-block;
+    width: 30%;
+    padding: 0;
+    margin: 0;
+    border: 1px solid transparent;
+
+}
+.down1 {
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 15px solid #f2f2f5;
+    margin-left: -25px;
+
+}
+.comment-list .normal-comment-list {
+
+    margin-top: 10px;
+}
+
+.comment-list {
+    background-color: #f2f2f5;
+    margin-top: 10px;
+    padding: 5px 15px;
+
+}
+
+.comment-list * {
+    font-size: 13px;
+
+}
+
+.normal-comment-list {
+
+    margin: 5px;
+}
+
+.comment-list .sub-comment-list {
+
+    margin: 5px 15px;
+    background-color: #eaeaec;
+}
+
+.comment-list .top {
+
+    padding-bottom: 10px;
+}
+
+.comment-list .add-comment {
+
+    padding: 10px 20px;
+}
+
+.comment-list .comment {
+
+    padding-bottom: 5px;
+}
+
+ul.dropdown-menu li {
+    border: none;
+    margin: 0;
+    padding: 0;
+
+}
+
+.have-img .dynamic-show .abstract {
+
+    width: 65%;
+    margin-right: 5%;
+
+}
+
+.have-img .dynamic-show .wrap-img {
+
+    display: inline-block;
+    height: 150px;
+    width: 30%;
+}
+.note-list .have-img .wrap-img img {
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    border: 1px solid #f0f0f0
+}

@@ -1,125 +1,4 @@
-<style>
-    li.dynamic {
-
-        background-color: #f1f6ff;
-        padding: 10px 15px;
-        width: 100%;
-    }
-
-    .dynamic .content {
-        width: 100%;
-    }
-
-    .img-box .mood-imgs img {
-
-        width: 100%;
-        height: 110px;
-
-    }
-
-    .img-box .mood-imgs {
-
-        padding: 0;
-    }
-
-    .meta a {
-
-        text-decoration: none;
-    }
-
-    .img-box .mood-imgs li {
-        cursor: zoom-in;
-        display: inline-block;
-        width: 30%;
-        padding: 0;
-        margin: 0;
-        border: 1px solid transparent;
-
-    }
-
-    .down1 {
-        width: 0;
-        height: 0;
-        border-left: 8px solid transparent;
-        border-right: 8px solid transparent;
-        border-bottom: 15px solid #f2f2f5;
-        margin-left: -25px;
-
-    }
-
-    .comment-list .normal-comment-list {
-
-        margin-top: 10px;
-    }
-
-    .comment-list {
-        background-color: #f2f2f5;
-        margin-top: 10px;
-        padding: 5px 15px;
-
-    }
-
-    .comment-list * {
-        font-size: 13px;
-
-    }
-
-    .normal-comment-list {
-
-        margin: 5px;
-    }
-
-    .comment-list .sub-comment-list {
-
-        margin: 5px 15px;
-        background-color: #eaeaec;
-    }
-
-    .comment-list .top {
-
-        padding-bottom: 10px;
-    }
-
-    .comment-list .add-comment {
-
-        padding: 10px 20px;
-    }
-
-    .comment-list .comment {
-
-        padding-bottom: 5px;
-    }
-
-    ul.dropdown-menu li {
-        border: none;
-        margin: 0;
-        padding: 0;
-
-    }
-
-    .have-img .dynamic-show .abstract {
-
-        width: 65%;
-        margin-right: 5%;
-
-    }
-
-    .have-img .dynamic-show .wrap-img {
-
-        display: inline-block;
-        height: 150px;
-        width: 30%;
-    }
-
-    .note-list .have-img .wrap-img img {
-        width: 100%;
-        height: 100%;
-        border-radius: 4px;
-        border: 1px solid #f0f0f0
-    }
-
-</style>
-
+<link rel="stylesheet" type="text/css" href="/css/dynamic.css">
 <div class="for-dynamic-clone hide">
 
     <li class="article dynamic">
@@ -167,10 +46,13 @@
                     <span class="ic-read-num"></span>
                 </span>
 
-                <span>
+
+                {{--点赞--}}
+                <a href="javascript:void(0);" class="do-like">
                     <i class="iconfont ic-zan"></i>
                     <span class="ic-zan-num"></span>
-                </span>
+                </a>
+
 
                 <a target="_blank" class="get-comment">
                     <i class="iconfont ic-list-comments"></i>
@@ -223,10 +105,12 @@
                                 </span>
 
                 {{--点赞--}}
-                <a href="javascript:void(0);" class="mood-do-like">
+                <a href="javascript:void(0);" class="do-like">
                     <i class="iconfont ic-zan"></i>
                     <span class="ic-zan-num"></span>
                 </a>
+
+
                 <a class="load-comment" target="_blank" href="javascript:void(0);" is-load="false">
                     <i class="iconfont ic-list-comments"></i>
                     <span class="dynamic-comment-num"></span>
@@ -285,7 +169,6 @@
         var pageDom = $(listContainer).children(".page");
 
 
-
         /*自动更新浏览次数*/
         function autoViewCount() {
 
@@ -341,24 +224,20 @@
                                 thiss.attr('add-view-num', addViewNum);
                             }
 
+                        }   //end 进行一次浏览
 
-                            //end 进行浏览
-                        }
 
                     }
 
                     thiss.attr('last-show-time', currentTimestamp);
 
                 }
-
             });
-
         }
 
 
         /*下拉到底自动添加*/
         (function addAutoLoad() {
-
 
             window.onscroll = function () {
 
@@ -429,14 +308,14 @@
         });
 
 
-        $(listContainer).on("click", ".mood-do-like", function () {
+        $(listContainer).on("click", ".do-like", function () {
 
 
                 var thiss = $(this);
 
                 var data = {
                     '_token': '{{csrf_token()}}',
-                    'target_id': thiss.parents(".mood").attr('dynamic-id'),
+                    'target_id': thiss.parents(".dynamic").attr('dynamic-id'),
                     'target_type': 0
                 };
 
@@ -615,9 +494,8 @@
 
                 } else {
 
-                    if (data.source_user_id == currentUserId && data.follow_state == 0) {
+                    if (data.follow_state === 0) {
                         /*以关注*/
-
                         followToggleHtml = '取消关注 ' + data.username;
 
                     }
@@ -626,6 +504,15 @@
             }
 
             $(followToggleDom).html(followToggleHtml);
+
+
+            //设置是否已赞
+
+            if (data.like_state === 0) {
+
+                $(domSelector).find('.do-like').addClass('liked');
+
+            }
 
             var metaDom = $(domSelector).find(".meta");
             $(metaDom).find(".ic-read-num").html(data.read_num);

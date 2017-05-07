@@ -16,11 +16,16 @@ class IndexController extends Controller
     public function index()
     {
 
+        $dynamics = Dynamic::where([
 
-        $dynamics = Dynamic::where('state', '=', 0)->orderBy('published_time', 'desc')->take(10)->get();
+            ['dynamic_type', '=', 1],
+            ['state', '=', 0]
+
+        ])->orderBy('read_num', 'desc')->take(3)->get();
+
+
 
         return view('app.index')->with('dynamics', $dynamics);
-
 
     }
 

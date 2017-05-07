@@ -28,8 +28,10 @@ class DynamicController extends Controller
         /*TODO  验证当前用户是否有访问权限*/
 
 
-        $fields = '`dynamic`.*,`username`,`avatar_key`,`user_relation`.`source_user_id`,`user_relation`.`state` as `follow_state`';
-        $tables = '`user`,`dynamic` LEFT JOIN `user_relation` ON `user_relation`.`target_user_id`=`dynamic`.`user_id`';
+        $fields = '`dynamic`.*,`username`,`avatar_key`,`user_relation`.`state` as `follow_state`,`like_record`.`state` as `like_state`';
+        $tables = '`user`,`dynamic`
+         LEFT JOIN `user_relation` ON `user_relation`.`target_user_id`=`dynamic`.`user_id` AND `user_relation`.`source_user_id` = ' . session('user_id') .
+            ' LEFT JOIN  `like_record` ON `dynamic`.`dynamic_id`=`like_record`.`target_id` AND `like_record`.`user_id` = ' . session('user_id') . ' AND `like_record`.`target_type`=0';
         $where = [
             '`dynamic`.`user_id`=`user`.`user_id`',
             '`dynamic` . `state` = 0',
@@ -41,15 +43,9 @@ class DynamicController extends Controller
 
 
         if ($type != '%' && is_numeric($type)) {
-            $where[] = '`dynamic_type` = ?';
+            $where[] = '`dynamic`.`dynamic_type` = ?';
             $values[] = intval($type);
         } else if ($type == 'zan') {
-
-            $tables = '`dynamic`,`user`,`like_record`';
-
-            $where[] = '`like_record`.user_id = `user`.`user_id`';
-            $where[] = '`like_record`.`target_id` = `dynamic`.`dynamic_id`';
-            $where[] = '`like_record`.`target_type` = 0';
             $where[] = '`like_record`.`state` = 0';
         }
 
