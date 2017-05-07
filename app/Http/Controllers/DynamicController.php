@@ -27,11 +27,23 @@ class DynamicController extends Controller
 
         /*TODO  验证当前用户是否有访问权限*/
 
+        $currentUserId = session('user_id');
 
-        $fields = '`dynamic`.*,`username`,`avatar_key`,`user_relation`.`state` as `follow_state`,`like_record`.`state` as `like_state`';
-        $tables = '`user`,`dynamic`
-         LEFT JOIN `user_relation` ON `user_relation`.`target_user_id`=`dynamic`.`user_id` AND `user_relation`.`source_user_id` = ' . session('user_id') .
-            ' LEFT JOIN  `like_record` ON `dynamic`.`dynamic_id`=`like_record`.`target_id` AND `like_record`.`user_id` = ' . session('user_id') . ' AND `like_record`.`target_type`=0';
+
+        $fields = '`dynamic`.*,`username`,`avatar_key`';
+
+
+        $tables = '`user`,`dynamic`';
+
+        if (!empty($currentUserId)) {
+
+            $fields = '`dynamic`.*,`username`,`avatar_key`,`user_relation`.`state` as `follow_state`,`like_record`.`state` as `like_state`';
+
+            $tables = '`user`,`dynamic`
+         LEFT JOIN `user_relation` ON `user_relation`.`target_user_id`=`dynamic`.`user_id` AND `user_relation`.`source_user_id` = ' . $currentUserId .
+                ' LEFT JOIN  `like_record` ON `dynamic`.`dynamic_id`=`like_record`.`target_id` AND `like_record`.`user_id` = ' . $currentUserId . ' AND `like_record`.`target_type`=0';
+        }
+
         $where = [
             '`dynamic`.`user_id`=`user`.`user_id`',
             '`dynamic` . `state` = 0',
