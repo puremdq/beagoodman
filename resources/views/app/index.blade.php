@@ -98,7 +98,7 @@
             </div>
 
 
-            <div class="col-sm-2 col-sm-offset-1 .col-xs-0 aside">
+            <div class="col-sm-2 col-sm-offset-1 hidden-xs aside">
                 <div class="board">
 
                     推荐位
