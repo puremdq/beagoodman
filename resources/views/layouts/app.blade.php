@@ -179,7 +179,7 @@
                                     <label for="username" class="control-label">用户名:</label>
                                     <input type="text" class="form-control" id="username" name="username"
                                            data-remote="{{url('validator')}}" data-minlength="3"
-                                           data-maxlength="15" data-remote-error="用户名已存在">
+                                           data-maxlength="15" data-remote-error="不能以数字开头或用户名已存在">
                                     <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
                                     <div class="help-block with-errors"></div>
                                 </div>

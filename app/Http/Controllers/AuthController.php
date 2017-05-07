@@ -66,6 +66,15 @@ class AuthController extends Controller
 
         $data = $request->except(['_token', 'captcha']);
 
+        if (is_numeric(($request->input('username'))[0])) {
+
+            return json_encode([
+                'state' => 1,
+                'msg' => '不能是数字开头'
+
+            ]);
+        }
+
         //var_dump($data);
 
         $rules = [
@@ -134,7 +143,6 @@ class AuthController extends Controller
         return back()->with(['state' => 0, 'tips' => '已安全退出']);
 
     }
-
 
 
 }

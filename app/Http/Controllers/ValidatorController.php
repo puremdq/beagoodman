@@ -21,8 +21,9 @@ class ValidatorController extends Controller
         foreach ($data as $key => $value) {
 
             if (in_array($key, $forValidators)) {
+                $msg = '';
 
-                $res = $this->doValidator($key, $value);
+                $res = $this->doValidator($key, $value, $msg);
 
                 if ($res) {
 
@@ -30,7 +31,7 @@ class ValidatorController extends Controller
 
                 } else {
 
-                    return response('', 400);
+                    return response($msg, 400);
 
                 }
 
@@ -53,6 +54,12 @@ class ValidatorController extends Controller
 
                 if (session('user') != null && session('user')->username == trim($value)) {
                     return true;//跟以前一样直接跳过验证
+                }
+
+                if (is_numeric(trim($value)[0])) {
+
+                    $errMsg = '不能是数字开头';
+                    return false;
                 }
 
                 $validator = Validator::make([$key => trim($value)], ['username' => 'unique:user']);
