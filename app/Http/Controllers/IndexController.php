@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Model\Dynamic;
-use App\Http\Model\Article;
+use App\Http\Model\VisitLog;
 
 
 /*首页控制器*/
@@ -15,6 +14,7 @@ class IndexController extends Controller
 
     public function index()
     {
+
 
         $dynamics = Dynamic::where([
 
