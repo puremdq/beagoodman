@@ -38,6 +38,8 @@
                                 }
                             }
 
+                            $i = 0;
+
                             ?>
                         </ol>
 
@@ -50,12 +52,14 @@
                                 $preview = unserialize($dynamic->preview);
                                 $imgUrl = empty($preview['first_img_url']) ? '/img/default.png' : $preview['first_img_url']; ?>
 
-                                <a class="item" href="/dynamic/{{$dynamic->dynamic_id}}">
+                                <a class="item @if($i==0) active @endif " href="/dynamic/{{$dynamic->dynamic_id}}">
                                     <img src="{{$imgUrl}}">
                                     <div class="carousel-caption">
                                         <h2 href="">{{$preview['title']}}</h2>
                                     </div>
                                 </a>
+
+                                <?php $i++; ?>
                             @endforeach
 
                         </div>
@@ -144,8 +148,6 @@
             });
             startShowDynamic(listContainer);
 
-
-            $("#hot-carousel-generic").find('.item').eq(0).addClass('active');
         })();
 
 

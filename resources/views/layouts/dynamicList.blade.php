@@ -391,6 +391,11 @@
         /*关注取消关注*/
         $(listContainer).on('click', ".follow-toggle", function () {
 
+            if(!isLogin()){
+
+                return false;
+            }
+
             function doFolloToggleAjax(thiss) {
 
                 $.ajax({
