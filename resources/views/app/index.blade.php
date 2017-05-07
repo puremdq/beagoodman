@@ -81,7 +81,7 @@
         <div class="row">
 
 
-            <div class="col-xs-7 col-xs-offset-1 main">
+            <div class="col-sm-7 col-sm-offset-1 .col-xs-10 main">
 
                 <div id="list-container">
 
@@ -98,7 +98,7 @@
             </div>
 
 
-            <div class="col-xs-2 col-xs-offset-1  aside">
+            <div class="col-sm-2 col-sm-offset-1 .col-xs-0 aside">
                 <div class="board">
 
                     推荐位
