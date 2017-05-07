@@ -288,6 +288,14 @@
             color: #e05244;
         }
 
+
+        .article .show-content img{
+
+            margin: 0 auto;
+            max-width:100%;
+            display: block;
+        }
+
     </style>
 
 @endsection
