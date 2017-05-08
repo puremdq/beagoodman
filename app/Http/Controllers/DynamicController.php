@@ -400,7 +400,7 @@ class DynamicController extends Controller
         $preview = array();
         $content = strip_tags($content);
 
-        $previewLen = 100;        /*TODO　可以将截取长度设为配置信息*/
+        $previewLen = 200;        /*TODO　可以将截取长度设为配置信息*/
 
         if ($title != null) {
             $preview['title'] = $title;
@@ -419,7 +419,7 @@ class DynamicController extends Controller
 
         }
 
-        if (strlen($content) <= $previewLen) {
+        if (mb_strlen($content) <= $previewLen) {
             $preview['content'] = $content;
             $preview['isAll'] = 1;
 
