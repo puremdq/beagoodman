@@ -139,6 +139,7 @@ class AuthController extends Controller
     public function logout()
     {
         session()->forget('user');
+        session()->forget('user_id');
 
         return back()->with(['state' => 0, 'tips' => '已安全退出']);
 

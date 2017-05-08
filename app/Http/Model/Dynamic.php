@@ -3,6 +3,7 @@
 namespace App\Http\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Http\Model\LikeRecord;
 
 class Dynamic extends Model
 {
@@ -36,12 +37,25 @@ class Dynamic extends Model
 
     }
 
+    /***
+     * 查看传入id用户  是否已经赞了当前文章
+     * @param int|string $userId
+     * @return boolean
+     **/
+    public function isUserLiked($userId)
+    {
+        if (empty($userId)) {
 
-    public function comments(){
+            return false;
+        }
 
-        return $this->hasMany('App\Http\Model\Comment','comment_target','dynamic_id');
+        $res = LikeRecord::where([
+            ['state', '=', 0],
+            ['user_id', '=', intval($userId)],
+            ['target_type', '=', '0'],
+            ['target_id', '=', $this->dynamic_id],
+        ]);
 
-
+        return $res === null ? false : true;
     }
-
 }

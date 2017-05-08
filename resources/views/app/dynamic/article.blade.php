@@ -288,11 +288,10 @@
             color: #e05244;
         }
 
-
-        .article .show-content img{
+        .article .show-content img {
 
             margin: 0 auto;
-            max-width:100%;
+            max-width: 100%;
             display: block;
         }
 
@@ -431,9 +430,8 @@
 
             <div class="meta-bottom">
 
-
                 <div class="like">
-                    <div class="btn like-group">
+                    <div class="btn like-group @if($dynamic->isUserLiked(session('user_id',''))) liked @endif">
                         <div class="btn-like"><a><i class="iconfont ic-zan"></i>赞</a></div>
                         <div class="modal-wrap"><a class="like-num">{{$dynamic->like_num}}</a></div>
                     </div>

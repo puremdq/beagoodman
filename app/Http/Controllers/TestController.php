@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Lib\Common;
+use App\Http\Model\Dynamic;
 
 class TestController extends Controller
 {
@@ -10,8 +10,6 @@ class TestController extends Controller
 
     public function test()
     {
-
-       var_dump( Common::getIpCity('58.19.57.184'));
 
 
     }

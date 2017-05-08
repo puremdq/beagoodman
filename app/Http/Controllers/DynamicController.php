@@ -92,16 +92,24 @@ class DynamicController extends Controller
           dd(DB::getQueryLog());
         */
 
-        $dynamic = Dynamic::find($id);
+        $dynamic = Dynamic::where([
+            ['dynamic_id', '=', $id],
+            ['dynamic_type', '=', 1]
 
-        if ($dynamic->dynamic_type == 1) {
+        ])->first();
 
+        if ($dynamic) {
             //article
+            $redisKey = 'dynamic_' . $id . 'add_read_num';
+            $this->startAddViews($dynamic->dynamic_id, 1);
+
             return view('app.dynamic.article')->with([
                 'dynamic' => $dynamic,
                 'article' => $dynamic->target,
             ]);
 
+        } else {
+            abort(404);
         }
 
 
@@ -220,17 +228,43 @@ class DynamicController extends Controller
     }
 
 
-    /*将给定id的动态浏览次数+1*/
+    /*响应客户端添加浏览次数请求*/
     public function addViews($id, Request $request)
+    {
+        $addNum = intval($request->input('each_add_num'));//要增加的浏览次数
+
+        if ($this->startAddViews($id, $addNum)) {
+
+            return json_encode([
+                'state' => 0,
+                'msg' => ''
+
+            ]);
+        } else {
+            return json_encode([
+                'state' => 1,
+                'msg' => '操作 失败'
+
+            ]);
+        }
+    }
+
+
+    /**
+     * 为给定id的动态 重新浏览次数+1
+     * @param string|int $id 要重新设置的动态id
+     * @param string|int $addNum 要添加的次数
+     * @return boolean
+     * */
+    private function startAddViews($id, $addNum)
     {
         $redisKey = 'dynamic_' . $id . 'add_read_num';
 
-        $threshold = 10;//设置大于等于多少时 同步到数据库/*TODO 可设为配置项*/
+        $threshold = 11;//设置大于等于多少时 同步到数据库/*TODO 可设为配置项*/
 
 
         try {
 
-            $addNum = intval($request->input('each_add_num'));//要增加的浏览次数
             $alreadyHaveAddNum = Redis::exists($redisKey) ? intval(Redis::get($redisKey)) : 0;//已经有的要增加的次数
             $newAlreadyHaveAddNum = $alreadyHaveAddNum + $addNum;//新的要增加的次数
 
@@ -249,22 +283,16 @@ class DynamicController extends Controller
 
             Redis::set($redisKey, $newAlreadyHaveAddNum);
 
-            return json_encode([
+            /* return json_encode([
 
-                'state' => 0
+                 'state' => 0
 
-            ]);
+             ]);*/
 
+            return true;
         } catch (Exception $e) {
-
-            return json_encode([
-
-                'state' => 1,
-                'msg' => $e->getMessage()
-
-            ]);
+            return false;
         }
-
     }
 
 
