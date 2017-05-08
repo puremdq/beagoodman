@@ -391,7 +391,7 @@
         /*关注取消关注*/
         $(listContainer).on('click', ".follow-toggle", function () {
 
-            if(!isLogin()){
+            if (!isLogin()) {
 
                 return false;
             }
@@ -478,8 +478,9 @@
             $(domSelector).find('.blue-link').html(data.username).attr('href', '/u/' + data.user_id);
             analyticShowTime($(domSelector).find('.time').attr('data-shared-at', data.published_time));
 
-            var preview = $.phpSerializer.unserialize(data.preview);
-
+            // var preview = $.phpSerializer.unserialize(data.preview);
+            var preview = unserialize(data.preview);
+            printLog(preview);
             analyticTargetEmotion($(domSelector).find(".abstract").html(preview.content));
 
             var userOpUlDom = $(domSelector).find('.user-op-ul');

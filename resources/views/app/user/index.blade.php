@@ -233,10 +233,7 @@
 @endsection
 
 @section('script')
-
     <script src="http://cdn.bootcss.com/viewerjs/0.6.2/viewer.min.js"></script>
-    <script src="/js/jquery-serialize.js"></script>
-
     <script>
 
         function initTriggerMenu(triggerMenu, triggerShow) {
