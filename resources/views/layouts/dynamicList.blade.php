@@ -480,7 +480,7 @@
 
             // var preview = $.phpSerializer.unserialize(data.preview);
             var preview = unserialize(data.preview);
-            printLog(preview);
+            //printLog(preview);
             analyticTargetEmotion($(domSelector).find(".abstract").html(preview.content));
 
             var userOpUlDom = $(domSelector).find('.user-op-ul');
