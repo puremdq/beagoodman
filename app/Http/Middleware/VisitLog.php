@@ -6,6 +6,7 @@ use Closure;
 
 use App\Http\Model\VisitLog as VisitLogModel;
 use Illuminate\Support\Facades\Redis;
+use App\Lib\Common;
 
 class VisitLog
 {
@@ -24,7 +25,11 @@ class VisitLog
         if (!Redis::exists($ip)) {
 
             $res = VisitLogModel::create(
-                ['ip' => $ip, 'visit_time' => date('Y-m-d h:i:s', time())]
+                [
+                    'ip' => $ip,
+                    'visit_time' => date('Y-m-d H:i:s', time()),
+                    'ip_city' => Common:: getIpCity()
+                ]
             );
 
             if ($res) {
@@ -33,5 +38,17 @@ class VisitLog
             }
         }
         return $next($request);
+    }
+
+
+    function getCity($ip)
+    {
+        $url = "http://ip.taobao.com/service/getIpInfo.php?ip=" . $ip;
+        $ip = json_decode(file_get_contents($url));
+        if ((string)$ip->code == '1') {
+            return false;
+        }
+        $data = (array)$ip->data;
+        return $data;
     }
 }

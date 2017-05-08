@@ -65,16 +65,25 @@ class Common
         }
 
         $url = "http://ip.taobao.com/service/getIpInfo.php?ip=" . $ip;
-        $ip = json_decode(@file_get_contents($url));
+        $ipDataBag = json_decode(@file_get_contents($url));
 
-        dd($ip);
+        if ($ipDataBag->code !== 0) {
 
-        if ((string)$ip->code == '1') {
-            return false;
+            return '未知地址';
         }
 
-        $data = (array)$ip->data;
-        return $data;
+        $ipData = $ipDataBag->data;
+
+
+        if ($ipData->country_id === 'CN') {
+
+
+            return $ipData->region . $ipData->city . ' ' . $ipData->isp;
+        } else {
+
+            return $ipData->country . $ipData->region;
+
+        }
     }
 
 

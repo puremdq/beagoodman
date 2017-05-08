@@ -11,7 +11,7 @@ class TestController extends Controller
     public function test()
     {
 
-        Common::getIpCity('223.104.107.174');
+       var_dump( Common::getIpCity('58.19.57.184'));
 
 
     }
