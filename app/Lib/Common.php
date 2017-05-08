@@ -56,18 +56,41 @@ class Common
         return $dataPath;
     }
 
+    public static function getIpCity($ip = '')
+    {
 
-//    /**
-//     * 相对路径
-//     * @param string $path1
-//     * @param int $path2
-//     * @return string
-//     */
-//    public static function getRelativePath($path1, $path2)
-//    {
-//        $path1 = str_replace('\\', '/', $path1);
-//        $path2 = str_replace('\\', '/', $path2);
-//
-//
-//    }
+        $ip = empty($ip) ? self::getIp() : $ip;
+        if ($ip == "127.0.0.1") {
+            return "本机地址";
+        }
+
+        $url = "http://ip.taobao.com/service/getIpInfo.php?ip=" . $ip;
+        $ip = json_decode(@file_get_contents($url));
+
+        dd($ip);
+
+        if ((string)$ip->code == '1') {
+            return false;
+        }
+
+        $data = (array)$ip->data;
+        return $data;
+    }
+
+
+    public static function getIp()
+    {
+        if (getenv("HTTP_CLIENT_IP") && strcasecmp(getenv("HTTP_CLIENT_IP"), "unknown")) {
+            $ip = getenv("HTTP_CLIENT_IP");
+        } else if (getenv("HTTP_X_FORWARDED_FOR") && strcasecmp(getenv("HTTP_X_FORWARDED_FOR"), "unknown")) {
+            $ip = getenv("HTTP_X_FORWARDED_FOR");
+        } else if (getenv("REMOTE_ADDR") && strcasecmp(getenv("REMOTE_ADDR"), "unknown")) {
+            $ip = getenv("REMOTE_ADDR");
+        } else if (isset ($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] && strcasecmp($_SERVER['REMOTE_ADDR'], "unknown")) {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        } else {
+            $ip = "unknown";
+        }
+        return $ip;
+    }
 }
