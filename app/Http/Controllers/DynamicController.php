@@ -49,6 +49,8 @@ class DynamicController extends Controller
             '`dynamic` . `state` = 0',
             '`user` . `state` = 0'
         ];
+
+
         $orderBy = '`published_time` desc';
         $limit = ($pageSize * ($page - 1) + $offset) . ',' . $pageSize;
         $values = [];
@@ -57,13 +59,36 @@ class DynamicController extends Controller
         if ($type != '%' && is_numeric($type)) {
             $where[] = '`dynamic`.`dynamic_type` = ?';
             $values[] = intval($type);
-        } else if ($type == 'zan') {
-            $where[] = '`like_record`.`state` = 0';
         }
+
 
         if ($userid != '%') {
             $where[] = '`user`.`user_id` = ?';
             $values[] = intval($userid);
+        }
+
+
+        if ($type == 'zan') {
+
+            $tables = '`user`,`dynamic` LEFT JOIN `user_relation` ON `user_relation`.`target_user_id`=`dynamic`.`user_id` AND `user_relation`.`source_user_id` = ' . $currentUserId
+
+                . ',`like_record`';
+
+           // $fields = '`dynamic`.*,`username`,`avatar_key`,`like_record`.`state` as `like_state`';
+
+           // $tables = '`user`,`dynamic`,`like_record`';
+            $where = [
+
+                '`like_record`.`target_id` = `dynamic`.`dynamic_id`',
+                '`like_record`.`target_type` = 0',
+                '`like_record`.`state` = 0',
+                '`dynamic`.`user_id` = `user`.`user_id`',
+                '`like_record`.`user_id` = ?'
+            ];
+
+
+            $values = [intval($userid)];
+
         }
 
 
