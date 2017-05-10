@@ -32,13 +32,12 @@
             </div>
 
             <a class="title" target="_blank"></a>
+            
 
             <div class="dynamic-show">
-                <p class="abstract" style="display: inline-block">
-
+              <p class="abstract" style="display: inline-block"></p>
 
             </div>
-            </p>
 
             <div class="meta">{{--相关信息--}}
                 <span>
