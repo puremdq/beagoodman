@@ -15,12 +15,6 @@ class User extends Model
     public $timestamps = false;
 
 
-    /*  public function create(){
-
-          echo 'sfdsdf';
-      }*/
-
-
     public function dynamic()
     {
 
@@ -33,42 +27,15 @@ class User extends Model
     /*查看传入用户是否是当前用户的粉丝*/
     public function isFollowers($id)
     {
-        try {
 
-            UserRelation::where(
-                [
-                    ['source_user_id', '=', $id],
-                    ['target_user_id', '=', $this->user_id],
-                    ['state', '=', 0]
-                ]
-            )->firstOrFail();
-
-            return true;
-        } catch (\Exception $exception) {
-            return false;
-
-        }
+        return UserRelation::isAFollowB($id, $this->user_id);
     }
 
 
     /*查看传入用户是否是当前用户的关注 */
     public function isFollowing($id)
     {
-        try {
-
-            UserRelation::where(
-                [
-                    ['source_user_id', '=', $this->user_id],
-                    ['target_user_id', '=', $id],
-                    ['state', '=', 0]
-                ]
-            )->firstOrFail();
-
-            return true;
-        } catch (\Exception $exception) {
-            return false;
-
-        }
+        return UserRelation::isAFollowB($this->user_id, $id);
     }
 
 
