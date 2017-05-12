@@ -7,7 +7,7 @@ use App\Http\Model\Dynamic;
 use App\Http\Model\LikeRecord;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use App\Lib\Common;
 
 /*点赞 查看是否有点赞记录相关控制*/
 
@@ -23,6 +23,8 @@ class LikeRecordController extends Controller
         $isCancel = 0; //是否是取消赞
 
         $likeTarget = null;
+
+
         if ($targetType == 0) {
             //给动态进行操作
 
@@ -47,7 +49,7 @@ class LikeRecordController extends Controller
         $likeRecord = LikeRecord::where([
             ['target_type', '=', $targetType],
             ['target_id', '=', $targetId],
-            ['user_id', '=', session('user')->user_id]
+            ['user_id', '=', session('user_id')]
         ])->first();
 
         DB::beginTransaction();//开始事务
@@ -91,12 +93,16 @@ class LikeRecordController extends Controller
                     'operate_time' => time()
                 ];
 
-                LikeRecord::create($data);
+                $likeRecord = LikeRecord::create($data);
 
                 $likeTarget->like_num = $likeTarget->like_num + 1;
                 $likeTarget->save();
             }
 
+            //0 赞了 你 动态     1 评论了你的动态  2赞了你的评论  3回复了你的评论  4@le你   5关注了你
+
+            $notificationType = $targetType == 0 ? 0 : 2;
+            Common::setNotification($likeTarget->user_id, session('user_id'), session('user')->username,$notificationType,$likeRecord->id, $isCancel);
 
             DB::commit();
 
@@ -121,7 +127,6 @@ class LikeRecordController extends Controller
             ]);
 
         }
-
-
     }
+
 }

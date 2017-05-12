@@ -12,12 +12,10 @@
     <title>新文章</title>
 
     <style>
-
         a {
 
             text-decoration: none;
         }
-
         #title {
 
             width: 100%;
@@ -33,7 +31,6 @@
             text-align: center;
 
         }
-
         .nav {
             position: fixed;
             top: 0;
@@ -68,7 +65,6 @@
             background-color: #04b03c;
 
         }
-
 
     </style>
 
@@ -273,13 +269,11 @@
                 btn: ['是的', '不要'] //按钮
             }, function (index) {
                 editor.$txt.html('<p><br></p>');
-                layer.closeAll(index);
+                layer.close(index);
             }, function () {
 
             });
-
         });
-
 
         $("#div1").one('click', function () {
 
@@ -289,10 +283,7 @@
 
         });
 
-
-
     })();
 
 </script>
-
 </html>

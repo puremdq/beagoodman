@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Lib\AliYunOss;
 use Mockery\Exception;
+use function PHPSTORM_META\type;
 
 class DynamicController extends Controller
 {
@@ -27,7 +28,7 @@ class DynamicController extends Controller
 
         /*TODO  验证当前用户是否有访问权限*/
 
-        $currentUserId = session('user_id');
+        $currentUserId = session('user_id', 0);
 
 
         $fields = '`dynamic`.*,`username`,`avatar_key`';
@@ -74,9 +75,9 @@ class DynamicController extends Controller
 
                 . ',`like_record`';
 
-           // $fields = '`dynamic`.*,`username`,`avatar_key`,`like_record`.`state` as `like_state`';
+            // $fields = '`dynamic`.*,`username`,`avatar_key`,`like_record`.`state` as `like_state`';
 
-           // $tables = '`user`,`dynamic`,`like_record`';
+            // $tables = '`user`,`dynamic`,`like_record`';
             $where = [
 
                 '`like_record`.`target_id` = `dynamic`.`dynamic_id`',
@@ -119,24 +120,20 @@ class DynamicController extends Controller
 
         $dynamic = Dynamic::where([
             ['dynamic_id', '=', $id],
-            ['dynamic_type', '=', 1]
 
         ])->first();
 
         if ($dynamic) {
-            //article
-            $redisKey = 'dynamic_' . $id . 'add_read_num';
-            $this->startAddViews($dynamic->dynamic_id, 1);
+            $this->startAddViews($id, 1);//添加浏览次数
 
-            return view('app.dynamic.article')->with([
-                'dynamic' => $dynamic,
-                'article' => $dynamic->target,
+            return view('app.dynamic.showDynamic')->with([
+                'dynamic' => $dynamic
             ]);
+
 
         } else {
             abort(404);
         }
-
 
     }
 
@@ -283,7 +280,7 @@ class DynamicController extends Controller
      * */
     private function startAddViews($id, $addNum)
     {
-        $redisKey = 'dynamic_' . $id . 'add_read_num';
+        $redisKey = 'dynamic_' . $id . '_add_read_num';
 
         $threshold = 11;//设置大于等于多少时 同步到数据库/*TODO 可设为配置项*/
 
@@ -296,17 +293,25 @@ class DynamicController extends Controller
 
             if ($newAlreadyHaveAddNum >= $threshold) {
 
-                $res = DB::update('update `dynamic` set `read_num` = `read_num`+? where `dynamic_id` = ?', [$threshold, intval($id)]);
+                $res = DB::update('update `dynamic` set `read_num` = `read_num`+? where `dynamic_id` = ?', [$newAlreadyHaveAddNum, intval($id)]);
 
                 if ($res) {
 
                     /*存储成功 减去阈值*/
-                    $newAlreadyHaveAddNum = $newAlreadyHaveAddNum - $threshold;
+                    Redis::del($redisKey);
+
+                } else {
+
+                    /**/
+                    Redis::set($redisKey, $newAlreadyHaveAddNum);
+
                 }
 
-            }
+            } else {
 
-            Redis::set($redisKey, $newAlreadyHaveAddNum);
+                Redis::set($redisKey, $newAlreadyHaveAddNum);
+
+            }
 
             /* return json_encode([
 

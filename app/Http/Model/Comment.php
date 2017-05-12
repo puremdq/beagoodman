@@ -27,5 +27,17 @@ class Comment extends Model
         return $this->belongsTo('App\Http\Model\Dynamic', 'comment_target', 'dynamic_id');
     }
 
+    public function parentComment()
+    {
+
+        if ($this->comment_pid != 0) {
+
+            return self::find($this->comment_pid);
+        } else {
+
+            return null;
+        }
+    }
+
 
 }

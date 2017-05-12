@@ -2,122 +2,11 @@
 
 @section('link')
 
-    <link href="/css/app.css" rel="stylesheet">
+
+    <link href="http://static.jasminecjc.com/css/setting.min.css" rel="stylesheet">
     <link href="http://cdn.bootcss.com/cropper/3.0.0-beta/cropper.min.css" rel="stylesheet">
 
     <style>
-
-
-        .setting .aside {
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            margin: 86px 0 0;
-            padding: 0 0 30px;
-            width: 280px;
-            overflow: auto;
-        }
-
-        .setting .aside a {
-            padding: 10px 15px;
-            font-size: 15px;
-            display: block;
-        }
-
-        .setting .aside .setting-icon {
-            margin-right: 15px;
-            width: 32px;
-            height: 32px;
-            text-align: center;
-            color: #fff;
-            background-color: #a0a0a0;
-            border-radius: 4px;
-            display: inline-block;
-            vertical-align: middle;
-        }
-
-        .setting .aside .setting-icon i {
-            margin: 6px 0 0 1px;
-            font-size: 16px;
-            display: block;
-        }
-
-        .setting .aside ul {
-            list-style: none;
-
-        }
-
-        .setting .aside .active {
-
-            background-color: #eeeeee;
-        }
-
-        .setting .aside ul li:hover {
-
-            background-color: #eeeeee;
-        }
-
-        .setting .aside ul li a:hover {
-
-            text-decoration: none;
-        }
-
-        .setting .main .avatar {
-            width: 100px;
-            height: 100px;
-        }
-
-        .avatar img {
-            width: 100%;
-            height: 100%;
-            border: 1px solid #ddd;
-            border-radius: 50%;
-            margin: 10px 0;
-        }
-
-        .setting .main .top-line {
-            padding-top: 0;
-        }
-
-        .setting .main tr {
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .setting .main td {
-            padding: 20px 0;
-        }
-
-        .setting .main .setting-title {
-            font-size: 15px;
-            color: #969696;
-        }
-
-        .setting .main textarea {
-            width: 80%;
-            height: 100px;
-            margin-bottom: 10px;
-            padding: 8px 10px;
-            font-size: 15px;
-            border: 1px solid #c8c8c8;
-            border-radius: 4px;
-            display: block;
-            resize: none;
-            outline-style: none;
-        }
-
-        .setting .main input[type=email], .setting .main input[type=text] {
-            width: 80%;
-        }
-
-        .setting table {
-
-            width: 100%;
-
-        }
-
-        .setting .main .setting-verticle {
-            vertical-align: bottom;
-        }
 
         img {
 
@@ -201,7 +90,6 @@
 
         </div>
 
-
     </div>
 
     <div class="container setting">
@@ -229,7 +117,7 @@
                              <span>帐号管理</span> <!----></a></li>--}}
                 </ul>
             </div>
-            <div class="col-xs-offset-4 col-xs-80 main">
+            <div class="col-xs-offset-8 col-xs-16 main">
                 <form id="form" data-toggle="validator">
 
                     {{csrf_field()}}
@@ -286,28 +174,19 @@
                             </td>
                         </tr>
 
+
                         <tr>
-                            <td class="setting-title setting-verticle">
+                            <td class="setting-title">
                                 性别
                             </td>
                             <td>
-                                <div class="col-xs-2">
-                                    <input type="radio" value="1" name="gender" @if($data->gender==1) checked @endif >
-                                    <span>男</span>
-
-                                </div>
-                                <div class="col-xs-2">
-                                    <input type="radio" value="2" name="gender"
-                                           @if($data->gender==2) checked @endif ><span>女</span>
-
-                                </div>
-                                <div class="col-xs-2">
-                                    <input type="radio" value="0" name="gender" @if($data->gender==0) checked @endif>
-                                    <span>保密</span>
-
-                                </div>
+                                <input type="radio" value="1" name="gender" @if($data->gender==1) checked @endif> <span>男</span>
+                                <input type="radio" value="2" name="gender"
+                                       @if($data->gender==2) checked @endif><span>女</span>
+                                <input type="radio" value="0" name="gender" @if($data->gender==0) checked @endif> <span>保密</span>
                             </td>
                         </tr>
+
 
                         <tr>
                             <td class="setting-title">电子邮件</td>
@@ -327,13 +206,15 @@
                             </td>
                         </tr>
 
+
+
                         <tr>
                             <td class="setting-title setting-verticle">消息接受设置</td>
                             <td>
-                                <div class="col-xs-4"><input type="radio" value="0" name="allowMessage"
+                                <div class="col-xs-8"><input type="radio" value="0" name="allowMessage"
                                                              @if($data->allowMessage==0) checked @endif>
                                     <span class="responsive-span">接收所有</span></div>
-                                <div class="col-xs-4"><input type="radio" value="1" name="allowMessage"
+                                <div class="col-xs-16"><input type="radio" value="1" name="allowMessage"
                                                              @if($data->allowMessage==1) checked @endif> <span
                                             class="responsive-span">只接收好友</span>
                                 </div>
@@ -366,6 +247,7 @@
 @endsection
 
 @section('script')
+    <script src="/js/canvas-toBlob.js"></script>
     <script src="http://cdn.bootcss.com/cropper/3.0.0-beta/cropper.min.js"></script>
 
     <script>

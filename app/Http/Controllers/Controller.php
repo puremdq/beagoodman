@@ -9,6 +9,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 
 class Controller extends BaseController
 {
@@ -55,4 +56,13 @@ class Controller extends BaseController
 
         return $results;
     }
+
+//    public function redis($key, $value)
+//    {
+//
+//        $res = Redis::get($key);
+//
+//        return $res != null ? $res : $value;
+//
+//    }
 }

@@ -1,79 +1,18 @@
 @extends('layouts.app')
 
 @section('link')
+    <link href="http://static.jasminecjc.com/css/user.min.css" rel="stylesheet">
+    <link href="http://static.jasminecjc.com/css/comment.min.css" rel="stylesheet">
 
-    <link href="/css/app.css" rel="stylesheet">
-    <link href="http://cdn.bootcss.com/viewerjs/0.6.2/viewer.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/css/comment.css">
-
-    <style>
-
-        .avatar.main-avatar img {
-            width: 90px;
-            height: 90px;
-        }
-
-
-    </style>
-
-
-    <style>
-
-        .trigger-menu {
-            margin-bottom: 20px;
-            border-bottom: 1px solid #f0f0f0;
-            list-style: none;
-            padding-left: 0;
-
-        }
-
-        .trigger-menu li {
-            display: inline-block;
-
-        }
-
-        .trigger-menu a {
-            display: block;
-            padding: 13px 20px;
-            font-size: 15px;
-            font-weight: 700;
-            line-height: 25px;
-            color: #969696;
-            text-decoration: none;
-        }
-
-        .trigger-menu li.active {
-            border-bottom: 2px solid #646464;
-        }
-
-        .trigger-menu li:hover {
-
-            border-bottom: 2px solid #646464;
-
-        }
-
-        .trigger-menu li.active a {
-            color: #333;
-
-        }
-
-        .trigger-menu li a:hover {
-            text-decoration: none;
-
-        }
-
-    </style>
 @endsection
 
-
 @section('title', $user->username)
-
 @section('content')
 
 
     <div class="container person">
         <div class="row">
-            <div class="col-xs-7 main">
+            <div class="col-xs-16 main">
 
                 <div class="main-top">
                     <input class="current-userid" hidden value="{{$user->user_id}}">
@@ -102,25 +41,29 @@
 
                         <a class="btn btn-hollow" href="javascript:void(0);">发私信</a>
 
-                        <div class="title">
-                            <a class="name" href="/u/{{$user->user_id}}">{{$user->username}}</a>
-                            <i class="iconfont ic-man"></i>
-                        </div>
-
                     @endif
+
+                    <div class="title">
+                        <a class="name" href="/u/{{$user->user_id}}">{{$user->username}}</a>
+                        @if($user->gender==1)
+                            <i class="iconfont ic-man"></i>
+                        @elseif($user->gender==2)
+                            <i class="iconfont ic-woman"></i>
+                        @endif
+                    </div>
 
                     <div class="info">
                         <ul>
                             <li>
                                 <div class="meta-block">
-                                    <a href="javascript:void(0);">
+                                    <a href="/u/{{$user->user_id}}?show=following">
                                         <p>{{$user->following_num}}</p>
                                         关注 <i class="iconfont ic-arrow"></i>
                                     </a></div>
                             </li>
                             <li>
                                 <div class="meta-block">
-                                    <a href="javascript:void(0);">
+                                    <a href="/u/{{$user->user_id}}?show=followers">
                                         <p>{{$user->followers_num}}</p>
                                         粉丝 <i class="iconfont ic-arrow"></i>
                                     </a>
@@ -128,7 +71,7 @@
                             </li>
                             <li>
                                 <div class="meta-block">
-                                    <a href="javascript:void(0);" class="mood-num">
+                                    <a href="/u/{{$user->user_id}}?show=dynamic&type=0" class="mood-num">
                                         <p>{{$user->mood_num}}</p>
                                         心情 <i class="iconfont ic-arrow"></i>
                                     </a></div>
@@ -136,7 +79,7 @@
 
                             <li>
                                 <div class="meta-block">
-                                    <a href="javascript:void(0);" class="article-num">
+                                    <a href="/u/{{$user->user_id}}?show=dynamic&type=1" class="article-num">
                                         <p>{{$user->article_num}}</p>
                                         文章 <i class="iconfont ic-arrow"></i>
                                     </a></div>
@@ -148,64 +91,147 @@
                 </div>
 
 
-                <ul class="trigger-menu" id="trigger-menu">
-                    <li class="active show-mood"><a href="javascript:void(0);"><i
-                                    class="iconfont ic-list-like"></i>
-                            心情</a>
-                    </li>
-                    <li class="show-article"><a href="javascript:void(0);"><i class="iconfont ic-articles"></i> 文章</a>
-                    </li>
-                    {{-- <li class=""><a href="/u/93666dd4205b?order_by=commented_at"><i
-                                     class="iconfont ic-latestcomments"></i>
-                             最新评论</a></li>--}}
-                    <li class=""><a href="javascript:void(0);"><i class="iconfont ic-zan"></i> 赞</a></li>
-                </ul>
+                @if($show=='dynamic')
+                    <ul class="trigger-menu" id="trigger-menu">
+                        <li class="@if(empty($_GET['type'])||$_GET['type']==0) active @endif show-mood"><a href="javascript:void(0);"><i
+                                        class="iconfont ic-list-like"></i>
+                                心情</a>
+                        </li>
+                        <li class="@if(!empty($_GET['type'])&&$_GET['type']==1) active @endif show-article"><a href="javascript:void(0);"><i
+                                        class="iconfont ic-articles"></i>
+                                文章</a>
+                        </li>
+                        {{-- <li class=""><a href="/u/93666dd4205b?order_by=commented_at"><i
+                                         class="iconfont ic-latestcomments"></i>
+                                 最新评论</a></li>--}}
+                        <li class=""><a href="javascript:void(0);"><i class="iconfont ic-zan"></i> 赞</a></li>
+                    </ul>
+                    <div id="trigger-show">
 
-                <div id="trigger-show">
+                        <div class="list-container mood-list" type="0">
 
-                    <div class="list-container mood-list" type="0">
+                            <input name="page" class="page" hidden="hidden" value="1">
+                            <input name="offset" class="offset" hidden="hidden" value="0">
 
-                        <input name="page" class="page" hidden="hidden" value="1">
-                        <input name="offset" class="offset" hidden="hidden" value="0">
+                            <ul class="note-list">
 
-                        <ul class="note-list">
-                        </ul>
+                            </ul>
 
-                        <button class="load-more btn">加载更多</button>
+                            <div class="find-nothing">
+                                <img src="http://img.beagoodman.cn/nothing.png">
+                                <div>这里还木有内容哦~</div>
+                            </div>
+
+                            <button class="load-more btn">加载更多</button>
+
+                        </div>
+
+
+                        <div class="list-container article-list" type="1">
+
+                            <input name="page" class="page" hidden="hidden" value="1">
+                            <input name="offset" class="offset" hidden="hidden" value="0">
+
+                            <ul class="note-list">
+                            </ul>
+
+                            <div class="find-nothing">
+                                <img src="http://img.beagoodman.cn/nothing.png">
+                                <div>这里还木有内容哦~</div>
+                            </div>
+
+                            <button class="load-more btn">加载更多</button>
+
+                        </div>
+
+
+                        <div class="list-container like-list" type="zan">
+
+                            <input name="page" class="page" hidden="hidden" value="1">
+                            <input name="offset" class="offset" hidden="hidden" value="0">
+
+                            <ul class="note-list">
+
+                            </ul>
+
+                            <div class="find-nothing">
+                                <img src="http://img.beagoodman.cn/nothing.png">
+                                <div>这里还木有内容哦~</div>
+                            </div>
+
+                            <button class="load-more btn">加载更多</button>
+
+                        </div>
 
                     </div>
 
+                @elseif($show=='following'||$show=='followers')
+                    {{--显示关注和未关注--}}
 
-                    <div class="list-container article-list" type="1">
+                    <ul class="trigger-menu">
+                        <li @if($show=='following') class="active" @endif>
+                            <a data-placeholder="user"
+                               href="/u/{{$user->user_id}}?show=following">关注用户 {{$user->following_num}}</a>
+                        </li>
+                        <li @if($show=='followers') class="active" @endif>
+                            <a data-placeholder="user"
+                               href="/u/{{$user->user_id}}?show=followers">粉丝 {{$user->followers_num}}</a>
+                        </li>
+                    </ul>
 
-                        <input name="page" class="page" hidden="hidden" value="1">
-                        <input name="offset" class="offset" hidden="hidden" value="0">
 
-                        <ul class="note-list">
-                        </ul>
+                    <div id="list-container">
+                        @if(count($userLists)>0)
 
-                        <button class="load-more btn">加载更多</button>
+                            <ul class="user-list">
+
+                                @foreach($userLists as $userItem )
+
+                                    <li>
+                                        <a class="avatar" href="/u/{{$userItem->user_id}}">
+                                            <img src="{{env('imgUrl')}}/{{$userItem->avatar_key}}">
+                                        </a>
+                                        <div class="info">
+                                            <a class="name" href="/u/{{$userItem->user_id}}">{{$userItem->username}}</a>
+                                            <div class="meta">
+                                                <span>关注 {{$userItem->following_num}}</span>
+                                                <span>粉丝 {{$userItem->followers_num}}</span>
+                                                <span>心情 {{$userItem->mood_num}}</span>
+                                                <span>文章 {{$userItem->article_num}}</span>
+                                            </div>
+                                            {{--   <div class="meta">
+                                                   写了 0 字，获得了 0 个喜欢
+                                               </div>--}}
+                                        </div>
+
+
+                                        <div class="following-group" user-id="{{$userItem->user_id}}"
+                                             style="display: inline">
+
+                                            <a class="btn btn-success follow @if(!empty(session('user'))&&session('user')->isFollowing($userItem->user_id)) hide @endif ">
+                                                <i class="iconfont ic-follow"></i><span>关注</span>
+                                            </a>
+
+                                            <a class="btn btn-default following @if(empty(session('user'))||!session('user')->isFollowing($userItem->user_id)) hide @endif ">
+                                                <i class="iconfont ic-followed"></i>
+                                                <span>已关注</span>
+                                            </a>
+                                        </div>
+                                    </li>
+
+                                @endforeach
+
+                            </ul>
+
+                        @endif
 
                     </div>
 
-
-                    <div class="list-container like-list" type="zan">
-
-                        <input name="page" class="page" hidden="hidden" value="1">
-                        <input name="offset" class="offset" hidden="hidden" value="0">
-
-                        <ul class="note-list">
-                        </ul>
-
-                        <button class="load-more btn">加载更多</button>
-
-                    </div>
-
-                </div>
+                @endif
 
             </div>
 
-            <div class="col-xs-4 col-xs-offset-1 aside">
+            <div class="col-xs-7 col-xs-offset-1 aside">
                 <div class="title">个人介绍</div>
                 <div class="description">
                     <div class="js-intro">
@@ -226,73 +252,78 @@
 
         </div>
     </div>
-    {{--<div data-vcomp="side-tool"></div>--}}
-    @include('layouts.commentJs')
-    @include('layouts.dynamicList')
+
+    @if($show=='dynamic')
+        @include('layouts.commentJs')
+        @include('layouts.dynamicList')
+
+    @endif
 
 @endsection
 
 @section('script')
-    <script src="http://cdn.bootcss.com/viewerjs/0.6.2/viewer.min.js"></script>
-    <script>
+    @if($show=='dynamic')
+        <script src="http://cdn.bootcss.com/imageviewer/0.5.1/viewer.min.js"></script>
+        <script>
 
-        function initTriggerMenu(triggerMenu, triggerShow) {
+            function initTriggerMenu(triggerMenu, triggerShow) {
 
-            $(triggerMenu).on('click', 'li', function () {
+                $(triggerMenu).on('click', 'li', function () {
+
+                    var thiss = $(this);
+                    var index = thiss.index();
+
+                    thiss.parent().children('.active').removeClass('active');
+                    thiss.addClass('active');
+
+                    var listContainerDom = $(triggerShow).children(".list-container");
+                    $(listContainerDom).addClass("hide");
+
+                    var currentListDom = $(listContainerDom).eq(index);
+                    currentListDom.removeClass("hide");
+
+
+                    var currentTme = getTimestamp();
+                    if (currentListDom.attr('update-at') === undefined) {
+
+                        startShowDynamic(currentListDom, $(".current-userid").val());
+
+                        currentListDom.attr('update-at', currentTme);
+                    }
+                });
+
+                triggerMenu.children('.active').click();
+            }
+
+            initTriggerMenu($("#trigger-menu"), $("#trigger-show"));
+
+            /*初始化*/
+            $("#list-container").on('DOMNodeInserted', '.comment-num', function () {
 
                 var thiss = $(this);
-                var index = thiss.index();
+                thiss.parents(".mood").find(".dynamic-comment-num").html(thiss.html());
 
-                thiss.parent().children('.active').removeClass('active');
-                thiss.addClass('active');
-
-                var listContainerDom = $(triggerShow).children(".list-container");
-                $(listContainerDom).addClass("hide");
-
-                var currentListDom = $(listContainerDom).eq(index);
-                currentListDom.removeClass("hide");
-
-                if (currentListDom.attr('is-init') === undefined) {
-
-                    startShowDynamic(currentListDom, $(".current-userid").val());
-
-                    currentListDom.attr('is-init', 'true');
-                }
             });
 
-            triggerMenu.children('.active').click();
-        }
 
-        initTriggerMenu($("#trigger-menu"), $("#trigger-show"));
+            /*    $(".article-num").on('click', function () {
+             $(".show-article").click();
 
-        /*初始化*/
-        $("#list-container").on('DOMNodeInserted', '.comment-num', function () {
+             });
 
-            var thiss = $(this);
-            thiss.parents(".mood").find(".dynamic-comment-num").html(thiss.html());
-
-        });
+             $(".mood-num").on('click', function () {
+             $(".show-mood").click();
+             });*/
 
 
-        $(".article-num").on('click', function () {
-            $(".show-article").click();
-
-        });
-
-        $(".mood-num").on('click', function () {
-            $(".show-mood").click();
-        });
-
-
-    </script>
+        </script>
+    @endif
 
     <script>
 
-        (function () {
-
+        (function initFolloingGroup() {
             var followingGroup;
             var data;
-
             $(".following-group").each(function () {
 
                 followingGroup = $(this);
@@ -307,6 +338,5 @@
 
 
     </script>
-
 
 @endsection

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Model\User;
 use Illuminate\Http\Request;
 use App\Http\Model\UserRelation;
+use App\Lib\Common;
 
 use Illuminate\Support\Facades\DB;
 
@@ -44,9 +45,9 @@ class UserRelationController extends Controller
 
             if ($userRelation == null) {
 
-                /*不存在新建关系*/
+                /*不存在  进行新建关系操作*/
 
-                UserRelation::create([
+                $userRelation = UserRelation::create([
                     'source_user_id' => $sourceUserId,
                     'target_user_id' => $targetUserId,
                     'follow_time' => time()
@@ -93,7 +94,12 @@ class UserRelationController extends Controller
             $targetUser->save();
 
             session(['user' => $sourceUser]);
+
+            //0 赞了 你 动态     1 评论了你的动态  2赞了你的评论  3回复了你的评论  4@le你   5关注了你
+            Common::setNotification($targetUserId, $sourceUserId, session('user')->username, 5, $userRelation->relation_id, $isCancel);
+
             DB::commit();
+
 
             return json_encode([
                 'state' => 0,

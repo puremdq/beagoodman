@@ -38,4 +38,5 @@ class UserRelation extends Model
 
         }
     }
+
 }

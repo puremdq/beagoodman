@@ -41,7 +41,7 @@ Route::get('/u', function () {
         return redirect('/u/' . session('user')->user_id);
     } else {
 
-        abort(404,'请登录');
+        abort(404, '请登录');
     }
 
 
@@ -92,5 +92,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/dynamic/{id}/delete', 'DynamicController@delete');    //操作动态(如删除)
 
     Route::post('/u/toggle_follow', 'UserRelationController@toggleFollow'); //关注 或取消关注
+
+    Route::get('/notification','NotificationController@index');
+    Route::get('/getnotification','NotificationController@getNotificationNum');
 
 });

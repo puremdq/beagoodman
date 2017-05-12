@@ -542,3 +542,18 @@ function unserialize(data) {
 }
 
 
+function toInt(val) {
+
+    if(val===undefined){
+
+        return 0;
+    }else {
+
+        return parseInt(val);
+    }
+
+}
+
+
+
+

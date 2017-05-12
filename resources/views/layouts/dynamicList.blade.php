@@ -1,8 +1,21 @@
 <link rel="stylesheet" type="text/css" href="/css/dynamic.css">
+<link href="http://cdn.bootcss.com/imageviewer/0.5.1/viewer.min.css" rel="stylesheet">
+
 <div class="for-dynamic-clone hide">
 
     <li class="article dynamic">
+        <div class="do-op btn-group">
+            <button type="button" class="btn btn-xs btn-info dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-chevron-down"></i>
+            </button>
 
+            <ul class="dropdown-menu do-op-ul">
+                <li><a class="dynamic-del hide" href="javascript:void(0);">删除</a></li>
+                <li><a class="dynamic-detail" href="javascript:void(0);">在详情页面展开</a></li>
+                <li><a class="follow-toggle" href="javascript:void(0);">关注/取消关注</a></li>
+                {{-- <li><a href="javascript:void(0);">加入黑名单</a></li>--}}
+            </ul>
+        </div>
 
         <div class="content">
 
@@ -16,29 +29,16 @@
                 </div>
 
 
-                <div class="user-op btn-group pull-right">
-                    <button type="button" class="btn btn-ls btn-info dropdown-toggle" data-toggle="dropdown">
-                        <span class="glyphicon glyphicon glyphicon-menu-down"></span>
-                    </button>
-
-                    <ul class="dropdown-menu user-op-ul">
-                        <li><a class="dynamic-del hide" href="javascript:void(0);">删除</a></li>
-                        <li><a class="follow-toggle" href="javascript:void(0);">关注/取消关注</a></li>
-                        {{-- <li><a href="javascript:void(0);">加入黑名单</a></li>--}}
-                    </ul>
-                </div>
-
-
             </div>
 
             <a class="title" target="_blank"></a>
 
+
             <div class="dynamic-show">
                 <p class="abstract" style="display: inline-block">
-
+                </p>
 
             </div>
-            </p>
 
             <div class="meta">{{--相关信息--}}
                 <span>
@@ -64,6 +64,18 @@
 
     <li class="mood dynamic">
 
+        <div class="do-op">
+            <button type="button" class="btn btn-xs btn-info dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-chevron-down"></i>
+            </button>
+
+            <ul class="dropdown-menu do-op-ul">
+                <li><a class="dynamic-del hide" href="javascript:void(0);">删除</a></li>
+                <li><a class="dynamic-detail" href="javascript:void(0);">在详情页面展开</a></li>
+                <li><a class="follow-toggle" href="javascript:void(0);">关注/取消关注</a></li>
+                {{-- <li><a href="javascript:void(0);">加入黑名单</a></li>--}}
+            </ul>
+        </div>
 
         <div class="content">
 
@@ -74,18 +86,6 @@
                 <div class="name">
                     <a class="blue-link" target="_blank"></a>
                     <span class="time"></span>
-                </div>
-
-                <div class="user-op btn-group pull-right">
-                    <button type="button" class="btn btn-ls btn-info dropdown-toggle" data-toggle="dropdown">
-                        <span class="glyphicon glyphicon glyphicon-menu-down"></span>
-                    </button>
-
-                    <ul class="dropdown-menu user-op-ul">
-                        <li><a class="dynamic-del hide" href="javascript:void(0);">删除</a></li>
-                        <li><a class="follow-toggle" href="javascript:void(0);">关注/取消关注</a></li>
-                        {{-- <li><a href="javascript:void(0);">加入黑名单</a></li>--}}
-                    </ul>
                 </div>
 
             </div>
@@ -161,7 +161,6 @@
 </div>
 
 <script>
-
 
     function startShowDynamic(listContainer, userid) {
 
@@ -263,11 +262,7 @@
         })();
 
 
-        //                //
-
-
         $(listContainer).on("click", ".mood .load-comment", function () {
-
 
             var thiss = $(this);
             var commentListDom = thiss.parents(".mood").find(".comment-list");
@@ -303,16 +298,11 @@
                 startTips(thiss, '查看评论', 1);
 
             }
-
-
         });
 
 
         $(listContainer).on("click", ".do-like", function () {
-
-
                 var thiss = $(this);
-
                 var data = {
                     '_token': '{{csrf_token()}}',
                     'target_id': thiss.parents(".dynamic").attr('dynamic-id'),
@@ -320,7 +310,6 @@
                 };
 
                 var likeNumDom = thiss.find(".ic-zan-num");
-
                 doLike(thiss, '{{url('dolike')}}', data, likeNumDom)
 
             }
@@ -329,7 +318,7 @@
 
         $(LoadMoreDom).on('click', function () {
 
-
+            //console.log("load-more");
             var offsetVal = $(listContainer).children(".offset").val();
             var type = $(listContainer).attr('type');
 
@@ -447,7 +436,8 @@
                 'movable': false,
                 'navbar': 2
             };
-            var viewer = new Viewer($(selector)[0], option);
+
+            $(selector).viewer(option);
 
 
         }
@@ -459,7 +449,7 @@
             var length = $(lis).length;
 
             if (length === 4) {
-                thiss.find("li").css('width', '40%');
+                selector.find("li").css('width', '40%');
 
             }
 
@@ -483,9 +473,12 @@
             //printLog(preview);
             analyticTargetEmotion($(domSelector).find(".abstract").html(preview.content));
 
-            var userOpUlDom = $(domSelector).find('.user-op-ul');
-
+            var userOpUlDom = $(domSelector).find('.do-op-ul');
+            //printLog(userOpUlDom);
+            userOpUlDom.find('.dynamic-detail').attr('href', '/dynamic/' + data.dynamic_id);
             var followToggleDom = userOpUlDom.find(".follow-toggle");
+
+            //printLog(followToggleDom);
 
             var followToggleHtml = '关注 ' + data.username;
 
@@ -516,7 +509,7 @@
 
             if (data.like_state === 0) {
 
-                $(domSelector).find('.do-like').addClass('liked');
+                $(domSelector).find('.do-like').addClass('active');
 
             }
 
@@ -567,8 +560,7 @@
                         '<img src="' + src + '">' +
                         ' </a>';
 
-                    $(domSelector).addClass('have-img').find('.dynamic-show')
-                        .append(innerHtml);
+                    $(domSelector).addClass('have-img').prepend(innerHtml);
 
                     /*  */
                 }
@@ -622,17 +614,26 @@
                                 return false;
                             }
 
-
                             dynamicDom = setDynamic(dynamicDom, dynamics[i]);
+                            var noteListDom = $(listContainer).find(".note-list");
+                            if (i === 0) {
+                                $(listContainer).find('.find-nothing').addClass('hide');
 
-
-                            $(listContainer).find(".note-list").append(dynamicDom);
-
-
+                            }
+                            noteListDom.append(dynamicDom);
                         }
                         if (resp.isAll == 1) {
 
-                            $(listContainer).children(".load-more").addClass('hide');
+                            if (dynamics.length == 0) {
+
+                                $(listContainer).children(".load-more").addClass('hide');
+
+                            } else {
+
+                                $(listContainer).children(".load-more").html('已加载全部');
+
+                            }
+
                         }
 
 
@@ -640,13 +641,9 @@
                         alertMessage('加载动态失败', -1);
                     }
 
-
                 }
 
             });
-
         }
     }
-
-
 </script>

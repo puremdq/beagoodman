@@ -11,8 +11,11 @@
     <title>@yield('title','beagoodman')</title>
 
     <!-- Bootstrap -->
-    <link href="/css/normalize.css" rel="stylesheet">
-    <link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://cdn.bootcss.com/normalize/7.0.0/normalize.min.css" rel="stylesheet">
+    <link href="http://static.jasminecjc.com/css/app.min.css" rel="stylesheet">
+
+    <link href="http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    {{-- <link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">--}}
 
     <link rel="stylesheet" type="text/css" href="{{url('/lib/sinaEmotion/jquery.sinaEmotion.css')}}"/>
 
@@ -74,6 +77,13 @@
             border: 1px solid #E8E8E8;
             z-index: 29891016;
 
+        }
+
+        .dropdown-menu a span {
+            vertical-align: middle;
+            display: inline-block;
+            margin-left: 10px;
+            min-width: 30px;
         }
 
 
@@ -224,7 +234,7 @@
                                          style="width: 100px;height:36px;margin-left: 10px">
                                     <a href="javascript:void (0);"
                                        onclick=" document.getElementById('captchaImg').src='{{url('/captcha')}}?'+Math.random()">
-                                        <span class="glyphicon glyphicon-refresh" style="margin-left: 10px;"></span>
+                                        <i class="fa fa-refresh" style="margin-left: 10px;"></i>
                                     </a>
                                     <div class="help-block with-errors"></div>
                                 </div>
@@ -271,7 +281,33 @@
 
                 <ul class="nav nav-pills" style="display: inline-block">
                     <li class="active"><a href="{{url('/')}}">首页</a></li>
-                    <li><a href="#">消息</a></li>
+
+
+                    <li class="notification dropdown">
+                        <a data-hover="dropdown" class="notification-btn dropdown-toggle" data-toggle="dropdown">
+                            <i class="iconfont ic-navigation-notification menu-icon"></i>
+                            <span class="menu-text">消息</span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/notification?type=comment" class="comment-notification"><i
+                                            class="iconfont ic-comments"></i>
+                                    <span>评论</span>
+                                    <!----></a></li>
+                        {{-- <li><a href="/notifications#/chats"><i class="iconfont ic-chats"></i> <span>简信</span>--}}
+                        <!----></a></li>
+                            {{-- <li><a href="/notifications#/requests"><i class="iconfont ic-requests"></i>
+                                     <span>投稿请求</span> <!----></a></li>--}}
+                            <li><a href="/notification?type=like" class="like-notification"><i
+                                            class="iconfont ic-likes"></i> <span>赞</span>
+                                    <!----></a></li>
+                            <li><a href="/notification?type=follow" class="follow-notification"><i
+                                            class="iconfont ic-follows"></i> <span>关注</span>
+                                    <!----></a></li>
+                            {{--<li><a href="/notifications#/money"><i class="iconfont ic-money"></i> <span>赞赏</span>--}}
+                        <!----></a></li>
+                            {{-- <li><a href="/notifications#/others"><i class="iconfont ic-others"></i> <span>其他消息</span>
+                                     <!----></a></li>--}}
+                        </ul>
+                    </li>
                 </ul>
 
 
@@ -279,37 +315,42 @@
 
                     <li class="dropdown">
 
-                        <a id="dLabel" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                           aria-haspopup="true" aria-expanded="false">
-                            <span class="glyphicon glyphicon-user">{{session('user')->username}}</span>
+
+                        <a class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
+                           href="u/{{session('user_id')}}">
+
+                            <i class="iconfont ic-navigation-profile"></i>
+                            <span>{{session('user')->username}}</span>
                             <span class="caret"></span>
                         </a>
 
-                        <ul class="dropdown-menu" aria-labelledby="dLabel">
+
+                        {{--  <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
+                              <span class="glyphicon glyphicon-user">{{session('user')->username}}</span>
+                          </a>--}}
+
+                        <ul class="dropdown-menu">
 
                             <?php $userId = session('user')->user_id ?>
 
                             <li>
                                 <a id="my-home" href="/u/{{$userId}}">
-                                    <span class="glyphicon glyphicon-log-in"> 我的主页</span>
+                                    <i class="iconfont ic-navigation-profile"></i><span> 我的主页</span>
                                 </a>
                             </li>
 
                             <li>
                                 <a id="setting" href="/setting">
-                                    <span class="glyphicon glyphicon-log-in"> 设置</span>
+                                    <i class="iconfont ic-navigation-settings"></i>
+                                    <span> 设置</span>
                                 </a>
                             </li>
 
-                            <li>
-                                <a id="my-msg" href="#">
-                                    <span class="glyphicon glyphicon-log-in"> 我的消息</span>
-                                </a>
-                            </li>
 
                             <li>
                                 <a id="logout" href="{{url('logout')}}">
-                                    <span class="glyphicon glyphicon-registration-mark"> 安全退出</span>
+                                    <i class="iconfont ic-navigation-signout"></i>
+                                    <span> 安全退出</span>
                                 </a>
                             </li>
 
@@ -353,7 +394,7 @@
 
     </header>
 
-    <div style="margin-top: 68px"></div>
+    <div style="margin-top: 68px" class="margin-top-div"></div>
 
 
     <!--content-->
@@ -368,6 +409,7 @@
 </div>
 <script src="http://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <script src="http://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="http://cdn.bootcss.com/bootstrap-hover-dropdown/2.0.10/bootstrap-hover-dropdown.min.js"></script>
 <script src="{{url('/lib/sinaEmotion/jquery.sinaEmotion.js')}}"></script>
 <script src="{{url('lib/layer/layer.js')}}"></script>
 <script src="{{url('js/validator.js')}}"></script>
@@ -380,11 +422,13 @@
 
 
     /*点赞操作*/
-    function doLike(likeDom, url, postData, likeNumDom) {
+    function doLike(likeDom, url, postData, likeNumDom, likedClass) {
 
         if (!isLogin()) {
             return false;
         }
+
+        likedClass = likedClass === undefined ? 'active' : likedClass;
 
         $.ajax({
 
@@ -399,12 +443,12 @@
 
                     if (resp.isCancel == 1) {
                         /*进行的是取消 而不是点赞操作*/
-                        likeDom.removeClass("liked");
+                        likeDom.removeClass(likedClass);
                         $(likeNumDom).html(likeNum - 1);
 
                     } else {
                         /*进行的不是取消 而是点赞操作*/
-                        likeDom.addClass("liked");
+                        likeDom.addClass(likedClass);
                         $(likeNumDom).html(likeNum + 1);
                     }
 
@@ -481,6 +525,22 @@
         startTips(followingGroupDom.find(followingClass), '取消关注');
 
     }
+
+
+    $(document).ready(function () {
+
+        $("a.dropdown-toggle").click(function () {
+
+            printLog('sdf00');
+            var thiss = $(this);
+
+            var dom = thiss.parent(".dropdown").children(".dropdown-menu").children("li").children("a");
+
+            window.location.href = dom.attr('href');
+
+        })
+
+    });
 
 </script>
 
@@ -560,7 +620,6 @@
 
 
     </script>
-
 @else
     <script>
 
@@ -752,6 +811,68 @@
                 return false;
             }
         }
+
+    </script>
+
+    <script>
+
+
+        function getNotificationNum(allNotificationDom, commentNotificationDom, likeNotificationDom, followNotificationDom) {
+
+            $.ajax({
+                url: '/getnotification',
+                type: 'get',
+                dataType: 'json',
+                success: function (resp) {
+
+                            {{-- /*0 赞了 你 动态     1 评论了你的动态  2赞了你的评论  3回复了你的评论  4@le你   5关注了你*/--}}
+
+                    var data = resp.data;
+
+                    var dataVal = [0,0,0,0,0,0];
+
+
+                    for(var i in data) {//不使用过滤
+
+                        dataVal[i]=data[i];
+                        console.log(i,":",man[i]);
+                    }
+
+
+                    var commentNum = toInt(dataVal[1]) + toInt(dataVal[3]) + toInt(dataVal[4]);
+                    var likeNum = toInt(dataVal[0]) + toInt(dataVal[2]);
+                    var followNum = toInt(dataVal[5]);
+
+                    var totalNum = commentNum + likeNum + followNum;
+
+                    if (totalNum > 0) {
+                        var html = ' <span class="badge">' + totalNum + '</span>';
+                        $(allNotificationDom).append(html);
+                    }
+
+                    if (commentNum > 0) {
+                        var html = ' <span class="badge">' + commentNum + '</span>';
+
+                        $(commentNotificationDom).append(html);
+                    }
+
+                    if (likeNum > 0) {
+                        var html = ' <span class="badge">' + likeNum + '</span>';
+
+                        $(likeNotificationDom).append(html);
+                    }
+
+
+                }
+
+            });
+        }
+
+        $(document).ready(function () {
+
+            getNotificationNum($(".notification-btn"), $(".comment-notification"), $(".like-notification"), $(".follow-notification"));
+
+        })
 
     </script>
 

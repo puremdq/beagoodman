@@ -141,7 +141,7 @@ class AuthController extends Controller
         session()->forget('user');
         session()->forget('user_id');
 
-        return back()->with(['state' => 0, 'tips' => '已安全退出']);
+        return redirect('/')->with(['state' => 0, 'tips' => '已安全退出']);
 
     }
 

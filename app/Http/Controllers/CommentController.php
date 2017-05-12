@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Model\Dynamic;
-use App\Http\Model\LikeRecord;
+use App\Http\Model\User;
+use App\Lib\Common;
 use Illuminate\Http\Request;
 use App\Http\Model\Comment;
 
@@ -62,7 +62,11 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         $data = $request->except('_token');
-        $data['user_id'] = session('user')->user_id;
+
+        $currentUser = session('user');//得到当前用户
+
+
+        $data['user_id'] = $currentUser->user_id;
         $data['comment_time'] = time();
         DB::beginTransaction();//开始事务
 
@@ -70,19 +74,25 @@ class CommentController extends Controller
 
             if ($data['comment_pid'] != 0) {
                 DB::update('update `comment` set `reply_num`=`reply_num`+1 where `comment_id` = ?', [$data['comment_pid']]);
+
             }
 
             $comment = Comment::create($data);
+
+
             $dynamic = $comment->target;
             $dynamic->comment_num = $dynamic->comment_num + 1;
             $dynamic->save();
+
+            $this->handleCommentNotification($comment, $currentUser, 0);
+
             DB::commit();
 
             return json_encode([
                     'state' => 0,
-                    'avatar_key' => session('user')->avatar_key,
-                    'username' => session('user')->username,
-                    'user_id' => session('user')->user_id,
+                    'avatar_key' => $currentUser->avatar_key,
+                    'username' => $currentUser->username,
+                    'user_id' => $currentUser->user_id,
                     'comment_content' => $data['comment_content'],
                     'comment_time' => $data['comment_time'],
                     'comment_id' => $comment->comment_id,
@@ -148,6 +158,12 @@ class CommentController extends Controller
                 $pComment->save();
             }
 
+
+            //处理消息
+
+            $this->handleCommentNotification($comment, session('user'), 1);
+
+
             DB::commit();
 
         } catch (\Exception $e) {
@@ -183,5 +199,47 @@ class CommentController extends Controller
                 ]);
 
         }
+    }
+
+
+    /*$addOrSub 添加 1删除*/
+    private function handleCommentNotification($comment, $currentUser, $addOrSub = '0')
+    {
+
+        //此处添加消息通知 puremdq 修改与 2017-5-9 11:20:53
+        //'like' => 0,'comment' => 1,'like1' => 2,'comment1' => 3,'follow' => 4
+        Common::setNotification($comment->target->user_id, $currentUser->user_id, $currentUser->username, 1, $comment->comment_id, $addOrSub);
+
+
+        if ($comment->comment_pid != 0) {
+
+            $pComment = $comment->parentComment();
+
+            if ($pComment != null) {
+
+                Common::setNotification($pComment->user_id, $currentUser->user_id, $currentUser->username, 3, $comment->comment_id, $addOrSub);
+
+            }
+
+        }
+
+
+        $str = $comment->comment_content;
+        if ($str[0] == '@') {
+
+            $str = mb_substr($str, 1);
+
+            $username = substr($str, 0, mb_strpos($str, ' '));
+
+            $toUser = User::where('username', $username)->first();
+
+            if ($toUser != null) {
+
+                Common::setNotification($toUser->user_id, $currentUser->user_id, $currentUser->username, 4, $comment->comment_id, $addOrSub);
+
+            }
+        }
+
+
     }
 }

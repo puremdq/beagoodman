@@ -155,7 +155,7 @@
 
         @else
 
-            <div>请<a onclick="$('#for-login').click();">登录</a>后评论</div>
+            <div>请<a onclick="$('#for-login').click();" style="color: #337ab7;">登录</a>后评论</div>
 
         @endif
 

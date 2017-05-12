@@ -1,27 +1,24 @@
 @extends('layouts.app')
 @section('link')
-    <link href="/css/app.css" rel="stylesheet">
-
-    <link href="http://cdn.bootcss.com/viewerjs/0.6.2/viewer.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/css/comment.css">
-
-
+    <link href="http://static.jasminecjc.com/css/index.min.css" rel="stylesheet">
+    <link href="http://static.jasminecjc.com/css/comment.min.css" rel="stylesheet">
 @endsection
 
 @section('title', 'beagoodman')
 
 @section('content')
-    <div class="container" id="all-container">
+    <div class="container  index" id="all-container">
 
-        <!---->
-        <div class="row" style="margin-bottom: 20px">
 
-        <?php $dynamicLength = count($dynamics);  ?>
+        <div class="row">
 
-        @if($dynamicLength>0)
+            <div class="col-sm-23 col-sm-offset-1">
 
-            <!--轮播图  显示浏览量最多的文章-->
-                <div class="col-xs-10 col-xs-offset-1">
+            <?php $dynamicLength = count($dynamics);  ?>
+
+            @if($dynamicLength>0)
+
+                <!--轮播图  显示浏览量最多的文章-->
 
                     <div id="hot-carousel-generic" class="carousel slide " data-ride="carousel">
                         <!-- Indicators -->
@@ -46,6 +43,7 @@
                         <!-- Wrapper for slides -->
                         <div class="carousel-inner" role="listbox">
 
+                            <?php $i = 0; ?>
                             @foreach($dynamics as $dynamic)
 
                                 <?php
@@ -66,28 +64,22 @@
 
                         <!-- Controls -->
                         <a class="left carousel-control" href="#hot-carousel-generic" role="button" data-slide="prev">
-                            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                            <i class="iconfont ic-previous-s"></i>
                         </a>
-                        <a class="right carousel-control" href="#hot-carousel-generic" role="button" data-slide="next">
-                            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                        <a class="right carousel-control" href="#hot-carousel-generic" data-slide="next">
+                            <i class="iconfont ic-next-s"></i>
                         </a>
                     </div>
 
-                </div>
 
-            @else
-                <span>文章太少了,无法为你推荐我们正在起步阶段</span>
-            @endif
+                @else
+                    <span>文章太少了,无法为你推荐我们正在起步阶段</span>
+                @endif
+            </div>
 
-        </div>
+            <div class="col-sm-16 col-sm-offset-1 main">
 
-
-        <div class="row">
-
-
-            <div class="col-sm-7 col-sm-offset-1 .col-xs-10 main">
-
-                <div id="list-container">
+                <div id="list-container" class="list-container">
 
                     <input name="page" class="page" hidden="hidden" value="1">
                     <input name="offset" class="offset" hidden="hidden" value="0">
@@ -102,7 +94,7 @@
             </div>
 
 
-            <div class="col-sm-2 col-sm-offset-1 hidden-xs aside">
+            <div class="col-sm-7 aside">
                 <div class="board">
 
                     推荐位
@@ -123,11 +115,8 @@
 @endsection
 
 @section('script')
-
-    <script src="http://cdn.bootcss.com/viewerjs/0.6.2/viewer.min.js"></script>
-
+    <script src="http://cdn.bootcss.com/imageviewer/0.5.1/viewer.min.js"></script>
     <script>
-
 
         /*
          analyticShowTime($(this));
