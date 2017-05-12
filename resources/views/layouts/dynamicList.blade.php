@@ -626,11 +626,10 @@
 
                             if(dynamics.length==0){
 
-                                $(listContainer).children(".load-more").add;
+                                $(listContainer).children(".load-more").html('已加载全部');
 
                             }else{
 
-                                $(listContainer).children(".load-more").html('已加载全部');
 
                             }
 
