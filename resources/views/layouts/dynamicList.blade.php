@@ -318,7 +318,7 @@
 
         $(LoadMoreDom).on('click', function () {
 
-            //console.log("load-more");
+            console.log("load-more");
             var offsetVal = $(listContainer).children(".offset").val();
             var type = $(listContainer).attr('type');
 
@@ -624,11 +624,11 @@
                         }
                         if (resp.isAll == 1) {
 
-                            if (dynamics.length == 0) {
+                            if(dynamics.length==0){
 
-                                $(listContainer).children(".load-more").addClass('hide');
+                                $(listContainer).children(".load-more").add;
 
-                            } else {
+                            }else{
 
                                 $(listContainer).children(".load-more").html('已加载全部');
 
