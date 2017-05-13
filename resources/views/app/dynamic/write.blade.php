@@ -135,9 +135,21 @@
             // 第一组，id叫做 'default'
             'default': {
                 title: '默认',  // 组名称
-                data: 'http://www.wangeditor.com/wangEditor/test/emotions.data'  // 服务器的一个json文件url，例如官网这里配置的是 http://www.wangeditor.com/wangEditor/test/emotions.data
+                data: 'http://jasminecjc.oss-cn-shanghai.aliyuncs.com/emotion/default-emoji.json'  // 服务器的一个json文件url，例如官网这里配置的是 http://www.wangeditor.com/wangEditor/test/emotions.data
+            },
+            'mood': {
+                title: '心情',  // 组名称
+                data: 'http://jasminecjc.oss-cn-shanghai.aliyuncs.com/emotion/mood-emoji.json'  // 服务器的一个json文件url，例如官网这里配置的是 http://www.wangeditor.com/wangEditor/test/emotions.data
+            },
+            'gaoguai': {
+                title: '搞怪',  // 组名称
+                data: 'http://jasminecjc.oss-cn-shanghai.aliyuncs.com/emotion/gaoguai-emoji.json'  // 服务器的一个json文件url，例如官网这里配置的是 http://www.wangeditor.com/wangEditor/test/emotions.data
+            },
+            'baozou': {
+                title: '暴走漫画',  // 组名称
+                data: 'http://jasminecjc.oss-cn-shanghai.aliyuncs.com/emotion/baozou-emoji.json'  // 服务器的一个json文件url，例如官网这里配置的是 http://www.wangeditor.com/wangEditor/test/emotions.data
             }
-
+////http://www.wangeditor.com/wangEditor/test/emotions.data
 
         };
 
