@@ -12,7 +12,7 @@
 
         <div class="row">
 
-            <div class="col-sm-23 col-sm-offset-1">
+            <div class="col-sm-23 col-xs-offset-1 col-xs-22">
 
             <?php $dynamicLength = count($dynamics);  ?>
 
@@ -77,7 +77,7 @@
                 @endif
             </div>
 
-            <div class="col-sm-16 col-sm-offset-1 main">
+            <div class="col-sm-16 col-xs-offset-1 col-xs-22  main">
 
                 <div id="list-container" class="list-container">
 
@@ -94,7 +94,7 @@
             </div>
 
 
-            <div class="col-sm-7 aside">
+            <div class="col-sm-7 aside hidden-xs">
                 <div class="board">
 
                     推荐位
