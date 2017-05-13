@@ -12,10 +12,11 @@
 
     <!-- Bootstrap -->
     <link href="http://cdn.bootcss.com/normalize/7.0.0/normalize.min.css" rel="stylesheet">
-    <link href="http://static.jasminecjc.com/css/app.min.css" rel="stylesheet">
+    {{--<link href="http://static.jasminecjc.com/css/app.min.css" rel="stylesheet">--}}
 
-    <link href="http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     {{-- <link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">--}}
+    <link href="/css/app.css" rel="stylesheet"/>
+    <link href="http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
     <link rel="stylesheet" type="text/css" href="{{url('/lib/sinaEmotion/jquery.sinaEmotion.css')}}"/>
 
@@ -829,19 +830,24 @@
 
                     var data = resp.data;
 
-                    var dataVal = [0,0,0,0,0,0];
+                    var dataVal = [0, 0, 0, 0, 0, 0];
+                    var i;
 
+                    for (i in data) {//不使用过滤
 
-                    for(var i in data) {//不使用过滤
+                        dataVal[i] = data[i];
 
-                        dataVal[i]=data[i];
-                        console.log(i,":",man[i]);
+                        //console.log(i + "  ->  " + data[i]);
                     }
 
 
                     var commentNum = toInt(dataVal[1]) + toInt(dataVal[3]) + toInt(dataVal[4]);
                     var likeNum = toInt(dataVal[0]) + toInt(dataVal[2]);
                     var followNum = toInt(dataVal[5]);
+
+//                    console.log('commentNum:'+commentNum);
+//                    console.log('likeNum:'+likeNum);
+//                    console.log('followNum:'+followNum);
 
                     var totalNum = commentNum + likeNum + followNum;
 
@@ -860,6 +866,12 @@
                         var html = ' <span class="badge">' + likeNum + '</span>';
 
                         $(likeNotificationDom).append(html);
+                    }
+
+                    if (followNum > 0) {
+                        var html = ' <span class="badge">' + followNum + '</span>';
+
+                        $(followNotificationDom).append(html);
                     }
 
 
