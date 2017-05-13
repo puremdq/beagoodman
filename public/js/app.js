@@ -553,7 +553,3 @@ function toInt(val) {
     }
 
 }
-
-
-
-

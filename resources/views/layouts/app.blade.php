@@ -12,10 +12,9 @@
 
     <!-- Bootstrap -->
     <link href="http://cdn.bootcss.com/normalize/7.0.0/normalize.min.css" rel="stylesheet">
-    {{--<link href="http://static.jasminecjc.com/css/app.min.css" rel="stylesheet">--}}
+    <link href="http://static.jasminecjc.com/css/app.min.css" rel="stylesheet">
 
-    {{-- <link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">--}}
-    <link href="/css/app.css" rel="stylesheet"/>
+    {{--<link href="/css/app.css" rel="stylesheet"/>--}}
     <link href="http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
     <link rel="stylesheet" type="text/css" href="{{url('/lib/sinaEmotion/jquery.sinaEmotion.css')}}"/>
@@ -415,7 +414,8 @@
 <script src="{{url('lib/layer/layer.js')}}"></script>
 <script src="{{url('js/validator.js')}}"></script>
 <script src="/lib/ssi-uploader/js/ssi-uploader.js"></script>
-<script src="/js/app.js"></script>
+<script src="http://static.jasminecjc.com/js/app.min.js"></script>
+
 
 
 <script>
@@ -873,10 +873,7 @@
 
                         $(followNotificationDom).append(html);
                     }
-
-
                 }
-
             });
         }
 
@@ -889,10 +886,6 @@
     </script>
 
 @endif
-
-
-
-
 
 @if(!empty(session('tips')))
     <script>
