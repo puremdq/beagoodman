@@ -7289,7 +7289,6 @@ body, html {
 
 body {
     padding-top: 56px;
-    min-width: 768px;
     font-family: -apple-system, SF UI Text, Arial, PingFang SC, Hiragino Sans GB, Microsoft YaHei, WenQuanYi Micro Hei, sans-serif;
     font-size: 17px
 }
@@ -7652,11 +7651,11 @@ input:focus {
     }
 }
 
-@media (max-width: 1080px) {
-    .container {
-        width: 750px
-    }
-}
+/*@media (max-width: 1080px) {*/
+    /*.container {*/
+        /*width: 750px*/
+    /*}*/
+/*}*/
 
 .recommend-banner, .tag-banner {
     width: 100%;
