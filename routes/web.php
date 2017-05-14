@@ -11,7 +11,14 @@
 |
 */
 
-Route::any('/test', 'TestController@test');
+//Route::any('/test', 'TestController@test');
+Route::get('/forteacherwu', function (){
+
+
+    return view('test');
+});
+Route::post('/forteacherwulike', 'TestController@foTeacher');
+
 
 
 Route::get('/', 'IndexController@index');
