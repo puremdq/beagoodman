@@ -16,6 +16,7 @@
 
             text-decoration: none;
         }
+
         #title {
 
             width: 100%;
@@ -31,6 +32,7 @@
             text-align: center;
 
         }
+
         .nav {
             position: fixed;
             top: 0;
@@ -135,19 +137,19 @@
             // 第一组，id叫做 'default'
             'default': {
                 title: '默认',  // 组名称
-                data: 'http://jasminecjc.oss-cn-shanghai.aliyuncs.com/emotion/default-emoji.json'  // 服务器的一个json文件url，例如官网这里配置的是 http://www.wangeditor.com/wangEditor/test/emotions.data
+                data: 'http://static.jasminecjc.com/emotion/default-emoji.json'
             },
             'mood': {
                 title: '心情',  // 组名称
-                data: 'http://jasminecjc.oss-cn-shanghai.aliyuncs.com/emotion/mood-emoji.json'  // 服务器的一个json文件url，例如官网这里配置的是 http://www.wangeditor.com/wangEditor/test/emotions.data
+                data: 'http://static.jasminecjc.com/emotion/mood-emoji.json'
             },
             'gaoguai': {
                 title: '搞怪',  // 组名称
-                data: 'http://jasminecjc.oss-cn-shanghai.aliyuncs.com/emotion/gaoguai-emoji.json'  // 服务器的一个json文件url，例如官网这里配置的是 http://www.wangeditor.com/wangEditor/test/emotions.data
+                data: 'http://static.jasminecjc.com/emotion/gaoguai-emoji.json'
             },
             'baozou': {
                 title: '暴走漫画',  // 组名称
-                data: 'http://jasminecjc.oss-cn-shanghai.aliyuncs.com/emotion/baozou-emoji.json'  // 服务器的一个json文件url，例如官网这里配置的是 http://www.wangeditor.com/wangEditor/test/emotions.data
+                data: 'http://static.jasminecjc.com/emotion/baozou-emoji.json'
             }
 ////http://www.wangeditor.com/wangEditor/test/emotions.data
 
@@ -231,9 +233,6 @@
         };
 
         editor.create();
-
-
-
 
 
         $("#sub_btn").click(function () {
