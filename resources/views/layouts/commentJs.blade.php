@@ -168,6 +168,14 @@
 
     /*评论相关js*/
 
+    function HTMLEncode(html) {
+        var temp = document.createElement("div");
+        (temp.textContent != null) ? (temp.textContent = html) : (temp.innerText = html);
+        var output = temp.innerHTML;
+        temp = null;
+        return output;
+    }
+
 
     function initComment(selector) {
 
@@ -405,7 +413,6 @@
          * */
         function setComment(commentsPlaceholder, data, type) {
 
-
             commentsPlaceholder.attr('user_id', data.user_id);
             commentsPlaceholder.addClass("comment-wrapper");
 
@@ -441,7 +448,7 @@
 
                 if (data.comment_content[0] == "@") {
 
-                    var str = data.comment_content;
+                    var str = HTMLEncode(data.comment_content);
                     var username = str.substring(1, str.indexOf(' ') + 1);
 
                     $(maleskineAuthor).attr('href', "{{url('u')}}/" + username);
