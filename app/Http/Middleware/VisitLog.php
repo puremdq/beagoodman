@@ -22,6 +22,12 @@ class VisitLog
         $redis = Redis::connection('default');
         $ip = $_SERVER["REMOTE_ADDR"];
 
+        if ($ip == '58.251.156.36') {
+
+            return abort('404', '');
+        }
+
+
         if (!Redis::exists($ip)) {
 
             $res = VisitLogModel::create(
@@ -37,6 +43,7 @@ class VisitLog
                 $redis->expire($ip, 300);//设置过期时间
             }
         }
+
         return $next($request);
     }
 
