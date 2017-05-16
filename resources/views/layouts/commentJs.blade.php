@@ -416,6 +416,8 @@
             commentsPlaceholder.attr('user_id', data.user_id);
             commentsPlaceholder.addClass("comment-wrapper");
 
+            data.comment_content = HTMLEncode(data.comment_content);
+
             if (type === 0) {
 
                 var avatar = commentsPlaceholder.find('.avatar');//头像
@@ -448,7 +450,6 @@
 
                 if (data.comment_content[0] == "@") {
 
-                    var str = HTMLEncode(data.comment_content);
                     var username = str.substring(1, str.indexOf(' ') + 1);
 
                     $(maleskineAuthor).attr('href', "{{url('u')}}/" + username);
