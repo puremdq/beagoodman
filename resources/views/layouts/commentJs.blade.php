@@ -450,7 +450,7 @@
 
                 if (data.comment_content[0] == "@") {
 
-                    var username = str.substring(1, str.indexOf(' ') + 1);
+                    var username = (data.comment_content).substring(1, str.indexOf(' ') + 1);
 
                     $(maleskineAuthor).attr('href', "{{url('u')}}/" + username);
 
