@@ -442,23 +442,17 @@
                 var commentUser = commentsPlaceholder.find('.comment-user');
                 var maleskineAuthor = commentsPlaceholder.find(".maleskine-author");
 
-
                 $(commentUser).attr('href', "{{url('u')}}/" + data.user_id);
                 $(commentUser).html(data.username);
                 commentsPlaceholder.find('.time').attr('data-shared-at', data.comment_time);
                 commentsPlaceholder.attr('id', 'comment-' + data.comment_id);
-
                 if (data.comment_content[0] == "@") {
 
-                    var username = (data.comment_content).substring(1, str.indexOf(' ') + 1);
-
+                    var str=data.comment_content;
+                    var username = str.substring(1, str.indexOf(' ') + 1);
                     $(maleskineAuthor).attr('href', "{{url('u')}}/" + username);
-
-
                     $(maleskineAuthor).html('@' + username);
-
                     $(maleskineAuthor).after(str.substring(str.indexOf(' ') + 1));
-
 
                 } else {
                     maleskineAuthor.parent().html(data.comment_content);
