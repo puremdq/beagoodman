@@ -21,26 +21,24 @@ class VisitLog
     {
         $redis = Redis::connection('default');
         $ip = $_SERVER["REMOTE_ADDR"];
+        $filterAll = ['101.226.162.90', '111.206.241.76', '125.88.222.250'];//过滤360网站检测的ip
 
-//        if ($ip == '58.251.156.36') {
-//
-//            return abort('404', '');
-//        }
+        if (!in_array($ip, $filterAll)) {
 
+            if (!Redis::exists($ip)) {
 
-        if (!Redis::exists($ip)) {
+                $res = VisitLogModel::create(
+                    [
+                        'ip' => $ip,
+                        'visit_time' => date('Y-m-d H:i:s', time()),
+                        'ip_city' => Common:: getIpCity()
+                    ]
+                );
 
-            $res = VisitLogModel::create(
-                [
-                    'ip' => $ip,
-                    'visit_time' => date('Y-m-d H:i:s', time()),
-                    'ip_city' => Common:: getIpCity()
-                ]
-            );
-
-            if ($res) {
-                $redis->set($ip, 1);//设置访问过
-                $redis->expire($ip, 300);//设置过期时间
+                if ($res) {
+                    $redis->set($ip, 1);//设置访问过
+                    $redis->expire($ip, 300);//设置过期时间
+                }
             }
         }
 
