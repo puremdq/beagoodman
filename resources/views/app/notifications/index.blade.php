@@ -471,7 +471,6 @@
                         }
                     };
 
-
                 })();
 
 
@@ -480,9 +479,7 @@
                     messageDetailDom.removeClass('hide');
                     $(".trigger-contents").addClass('hide');
                     messageDetailDom.find('.other-user').attr('href', '/u/' + otherUserId).html(otherUserName);
-
                     getMessageAndInsert();
-
 
                 }
 
@@ -592,10 +589,7 @@
                                         scrollToBottom();
                                     }
                                 }
-
-
                             }
-
                         }
                     })
 
@@ -622,9 +616,7 @@
 
                     var content = (data.message_content == null || data.message_content == '' ) ? data.message_preview : data.message_content;
                     liDom.find('.content').html(content);
-
                     return liDom;
-
                 }
             }
         </script>

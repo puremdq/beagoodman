@@ -243,18 +243,19 @@
 
                 if (!LoadMoreDom.hasClass("hide") && isElementInViewport($(LoadMoreDom)[0])) {
 
-                    if (pageDom.val() <= 10) {
+                    if(LoadMoreDom.html()!='已加载全部'){
 
-                        LoadMoreDom.html('正在加载...');
-                        LoadMoreDom.click();
+                        if (pageDom.val() <= 10) {
 
-                    } else {
+                            LoadMoreDom.html('正在加载...');
+                            LoadMoreDom.click();
 
-                        LoadMoreDom.html('加载更多');
+                        } else {
+
+                            LoadMoreDom.html('加载更多');
+                        }
                     }
-
                 }
-
 
                 autoViewCount();
             }
@@ -625,16 +626,9 @@
                         if (resp.isAll == 1) {
 
                             if (dynamics.length == 0) {
-
                                 $(listContainer).children(".load-more").html('已加载全部');
-
-                            } else {
-
-
                             }
-
                         }
-
 
                     } else {
                         alertMessage('加载动态失败', -1);
