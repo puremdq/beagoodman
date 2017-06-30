@@ -156,14 +156,45 @@ function formatDate(timestamp, separator) {
 
     }
 
+    var month, date;
+    var nowDate = new Date();
+    var nowTimestamp = getTimestamp(nowDate);
+
+
     var d = new Date(parseInt(timestamp) * 1000);
 
     var year = d.getFullYear();
-    var month = d.getMonth() + 1;
-    var date = d.getDate();
+    var thisYear = nowDate.getFullYear();
+
+    if (thisYear === year) {
+        year = '';
+    } else {
+
+        year = year + separator;
+    }
+    if (nowTimestamp - timestamp < 2 * 3600 * 24) {
+
+        if (nowTimestamp - timestamp < 3600 * 24) {
+
+            month = '';
+            date = '昨天';
+        } else {
+
+            month = '';
+            date = '前天';
+        }
+
+    } else {
+
+        month = d.getMonth() + 1;
+        month = month + separator;
+        date = d.getDate();//号数
+    }
+
     var hour = d.getHours();
     var minute = d.getMinutes();
-    return year + separator + month + separator + date + "  " + hour + ":" + minute;
+
+    return year + month + date + "  " + hour + ":" + minute;
 }
 
 
@@ -544,10 +575,10 @@ function unserialize(data) {
 
 function toInt(val) {
 
-    if(val===undefined){
+    if (val === undefined) {
 
         return 0;
-    }else {
+    } else {
 
         return parseInt(val);
     }
@@ -560,4 +591,12 @@ function HTMLEncode(html) {
     var output = temp.innerHTML;
     temp = null;
     return output;
+}
+
+function scrollToBottom() {
+    var h = $(document).height()-$(window).height();
+    $(document).scrollTop(h);
+}
+function scrollToTop() {
+    $('html, body').animate({scrollTop:0}, 'slow');
 }

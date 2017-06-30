@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Lib\AliYunOss;
 use Illuminate\Http\Request;
 use App\Lib\FileUpload;
-use App\Http\Model\File;
 use Illuminate\Support\Facades\Validator;
 
 class SettingController extends Controller
@@ -138,15 +137,12 @@ class SettingController extends Controller
         $fileUpload = new FileUpload($inputName, ['storeDriver' => 'aliYunOss', 'uploadPath' => $uploadPath, 'bucket' => env('bucket')], $aliYunOss);
         $fileUpload->initialize();
 
-        if ($fileUpload->initialize()) {
+        if ($fileUpload->execute()) {
 
-            if ($fileUpload->execute()) {
-
-                $newKey = $uploadPath . $fileUpload->getVariable('newFileName');
-                return $newKey;
-            }
-
+            $newKey = $uploadPath . $fileUpload->getVariable('newFileName');
+            return $newKey;
         }
+
         return false;
     }
 }

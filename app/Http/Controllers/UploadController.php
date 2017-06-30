@@ -43,7 +43,6 @@ class UploadController extends Controller
 
         //$redis->set("list", "a", "ex", "10");
         $fileUpload = new FileUpload($inputName, ['storeDriver' => 'redis', 'redisKey' => $key, 'expire' => 300], $redis);
-        $fileUpload->initialize();
         $res = $fileUpload->execute();
 
         if ($res) {

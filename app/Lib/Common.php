@@ -107,7 +107,7 @@ class Common
     }
 
 
-    /*查看给定数组是否为空*/
+    /*查看给定数组是否为空 或者全为零*/
     public static function arrIsNull($arr)
     {
 
@@ -137,12 +137,13 @@ class Common
      * @param int|string $toUserId 要通知的用户id
      * @param string $fromUsername 要通知的用户名
      * @param int|string $fromUserId 发起该消息的用户id
-     * @param int|string $notificationType 通知消息类型   //0 赞了 你 动态     1 评论了你的动态  2赞了你的评论  3回复了你的评论  4@le你   5关注了你
+     * @param int|string $notificationType 通知消息类型   //0 赞了 你 动态     1 评论了你的动态  2赞了你的评论  3回复了你的评论  4@le你   5关注了你 6站内信
      * @param int|string $targetId 产生此条 通知 的记录id (新加的评论  赞)
      * @param int $addOrSub 0添加消息  1删除消息
+     * @param boolean $onlyForRedis true 只存入redis不写入数据库 false 都要
      * @return string msg 日志信息
      */
-    public static function setNotification($toUserId, $fromUserId, $fromUsername, $notificationType = 0, $targetId = null, $addOrSub = 0)
+    public static function setNotification($toUserId, $fromUserId, $fromUsername, $notificationType = 0, $targetId = null, $addOrSub = 0, $onlyForRedis = false)
     {
 
         if ($toUserId == $fromUserId) {
@@ -154,8 +155,6 @@ class Common
 
         if ($addOrSub == 1) {
 
-
-
             $userNotification = UserNotification::where([
                 ['to_user_id', '=', $toUserId],
                 ['from_user_id', '=', $fromUserId],
@@ -166,9 +165,8 @@ class Common
 
             $redisData = json_decode(Redis::get($redisKey), true);
 
-            if ($redisData !== null && $userNotification !== null) {
+            if (($redisData !== null) && ($onlyForRedis == true || $userNotification !== null)) {
                 //只有这样才进行操作
-
 
                 $userNotification->state = 2;
                 if ($userNotification->save()) {
@@ -179,22 +177,15 @@ class Common
                         Redis::del($redisKey);
 
                     } else {
-
                         Redis::set($redisKey, json_encode($redisData));
-
                     }
-
                     return '';
-
                 } else {
-
                     return '数据库存入失败';
                 }
 
             } else {
-
                 return '数据存在错误';
-
             }
 
 
@@ -209,7 +200,8 @@ class Common
                 'time' => time()
             ];
 
-            if (UserNotification::create($notificationData)) {
+
+            if ($onlyForRedis == true || UserNotification::create($notificationData)) {
 
                 $redisData = json_decode(Redis::get($redisKey), true);
                 if ($redisData !== null) {
@@ -232,7 +224,6 @@ class Common
 
                 return '数据库写入新消息失败';
             }
-
 
         } else {
 

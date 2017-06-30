@@ -34,10 +34,12 @@ class Controller extends BaseController
      * @param string $limit 如'0,1000'
      * @return mixed
      * */
-    public function ls($fields, $tables, $where, $values = [], $orderBy = null, $limit = null)
+    public function ls($fields = '*', $tables, $where = null, $values = [], $orderBy = null, $limit = null)
     {
 
-        $sql = 'select ' . $fields . ' from ' . $tables . ' where ' . implode(" AND ", $where);
+
+        $where = empty($where) ? '' : ' where ' . implode(" AND ", $where);
+        $sql = 'select ' . $fields . ' from ' . $tables . $where;
 
         if (!empty($orderBy)) {
 

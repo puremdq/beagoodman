@@ -102,5 +102,13 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/notification','NotificationController@index');
     Route::get('/getnotification','NotificationController@getNotificationNum');
+    Route::post('/delnotification','NotificationController@delNotificationNum');
+
+
+    Route::get('/message','MessageController@index');
+
+    Route::post('/sendmessage','MessageController@sendMessage');
+
+
 
 });

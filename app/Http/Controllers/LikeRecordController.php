@@ -83,7 +83,6 @@ class LikeRecordController extends Controller
                 $likeRecord->save();
                 $likeTarget->save();
 
-
             } else {
                 /*没有记录 进行第一次点赞*/
                 $data = [
@@ -119,7 +118,6 @@ class LikeRecordController extends Controller
             DB::rollBack();
 
             return json_encode([
-
                 'state' => 1,
                 'msg' => $exception->getMessage(),
                 'isCancel' => $isCancel

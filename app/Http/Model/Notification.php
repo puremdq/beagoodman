@@ -22,7 +22,7 @@ class Notification extends Model
 
     }
 
-//0 赞了 你 动态     1 评论了你的动态  2赞了你的评论  3回复了你的评论  4@了你   5关注了你
+//0 赞了 你 动态     1 评论了你的动态  2赞了你的评论  3回复了你的评论  4@了你   5关注了你 6站内信
     public function target()
     {
         $type = intval($this->notification_type);
@@ -37,6 +37,10 @@ class Notification extends Model
 
         } else if ($type == 5) {
             return $this->hasOne('App\Http\Model\UserRelation', 'relation_id', 'target_id');
+
+
+        } else if ($type == 6) {
+            return $this->hasOne('App\Http\Model\Message', 'message_id', 'target_id');
 
 
         } else {

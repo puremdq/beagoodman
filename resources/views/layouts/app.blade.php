@@ -13,12 +13,9 @@
     <!-- Bootstrap -->
     <link href="http://cdn.bootcss.com/normalize/7.0.0/normalize.min.css" rel="stylesheet">
     <link href="http://static.jasminecjc.com/css/app.min.css" rel="stylesheet">
-
     {{--<link href="/css/app.css" rel="stylesheet"/>--}}
     <link href="http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-
-    <link rel="stylesheet" type="text/css" href="{{url('/lib/sinaEmotion/jquery.sinaEmotion.css')}}"/>
-
+    <link rel="stylesheet" type="text/css" href="/lib/sinaEmotion/jquery.sinaEmotion.css"/>
     <link href="/lib/ssi-uploader/styles/ssi-uploader.min.css" rel="stylesheet"/>
 @yield('link')
 
@@ -299,6 +296,14 @@
                             <li><a href="/notification?type=like" class="like-notification"><i
                                             class="iconfont ic-likes"></i> <span>赞</span>
                                     <!----></a></li>
+
+                            <li>
+                                <a href="/notification?type=message" class="message-notification">
+                                    <i class="iconfont ic-chats"></i>
+                                    <span>站内信</span>
+                                </a>
+                            </li>
+
                             <li><a href="/notification?type=follow" class="follow-notification"><i
                                             class="iconfont ic-follows"></i> <span>关注</span>
                                     <!----></a></li>
@@ -414,7 +419,7 @@
 <script src="{{url('lib/layer/layer.js')}}"></script>
 <script src="{{url('js/validator.js')}}"></script>
 <script src="/lib/ssi-uploader/js/ssi-uploader.js"></script>
-<script src="http://static.jasminecjc.com/js/app.min.js"></script>
+<script src="/js/app.js"></script>
 
 
 
@@ -817,8 +822,7 @@
 
     <script>
 
-
-        function getNotificationNum(allNotificationDom, commentNotificationDom, likeNotificationDom, followNotificationDom) {
+        function getNotificationNum(allNotificationDom, commentNotificationDom, likeNotificationDom, followNotificationDom,messageNotificationDom) {
 
             $.ajax({
                 url: '/getnotification',
@@ -826,11 +830,10 @@
                 dataType: 'json',
                 success: function (resp) {
 
-                            {{-- /*0 赞了 你 动态     1 评论了你的动态  2赞了你的评论  3回复了你的评论  4@le你   5关注了你*/--}}
+                            {{-- /*0 赞了 你 动态     1 评论了你的动态  2赞了你的评论  3回复了你的评论  4@le你   5关注了你  6站内信*/--}}
 
                     var data = resp.data;
-
-                    var dataVal = [0, 0, 0, 0, 0, 0];
+                    var dataVal = [0, 0, 0, 0, 0, 0,0];
                     var i;
 
                     for (i in data) {//不使用过滤
@@ -844,12 +847,13 @@
                     var commentNum = toInt(dataVal[1]) + toInt(dataVal[3]) + toInt(dataVal[4]);
                     var likeNum = toInt(dataVal[0]) + toInt(dataVal[2]);
                     var followNum = toInt(dataVal[5]);
+                    var messageNum = toInt(dataVal[6]);
 
 //                    console.log('commentNum:'+commentNum);
 //                    console.log('likeNum:'+likeNum);
 //                    console.log('followNum:'+followNum);
 
-                    var totalNum = commentNum + likeNum + followNum;
+                    var totalNum = commentNum + likeNum + followNum+messageNum;
 
                     if (totalNum > 0) {
                         var html = ' <span class="badge">' + totalNum + '</span>';
@@ -873,13 +877,18 @@
 
                         $(followNotificationDom).append(html);
                     }
+
+                    if (messageNum > 0) {
+                        var html = ' <span class="badge">' + messageNum + '</span>';
+                        $(messageNotificationDom).append(html);
+                    }
                 }
             });
         }
 
         $(document).ready(function () {
 
-            getNotificationNum($(".notification-btn"), $(".comment-notification"), $(".like-notification"), $(".follow-notification"));
+            getNotificationNum($(".notification-btn"), $(".comment-notification"), $(".like-notification"), $(".follow-notification"),$(".message-notification"));
 
         })
 

@@ -39,7 +39,7 @@
                         </div>
 
 
-                        <a class="btn btn-hollow" href="javascript:void(0);">发私信</a>
+                        <a class="btn btn-hollow" href="/notification?type=message&sendMessage=true&userId={{$user->user_id}}&username={{$user->username}}">发私信</a>
 
                     @endif
 
