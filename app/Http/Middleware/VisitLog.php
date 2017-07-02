@@ -22,12 +22,12 @@ class VisitLog
         $ip = $_SERVER["REMOTE_ADDR"];
 
         $ipCity = Common::getIpCity($ip);
-        if ($ipCity) {
-
-            if (strpos($ipCity, '阿里巴巴')) {
-                return abort(404);
-            }
-        }
+//        if ($ipCity) {
+//
+//            if (strpos($ipCity, '阿里巴巴')) {
+//                return abort(404);
+//            }
+//        }
 
         $filterAll = ['101.226.162.90', '111.206.241.76', '125.88.222.250', '111.206.221.98', '220.178.7.202'];//过滤360网站检测的ip
 

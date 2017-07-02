@@ -44,7 +44,7 @@ class AssistController extends Controller
             }
             header('Content-type: image/' . $type);
             echo $img;
-            
+
         } else {
 
             try {
