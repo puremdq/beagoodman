@@ -42,7 +42,7 @@ class AssistController extends Controller
 
             } catch (\Exception $e) {
 
-                echo $exception->getMessage();
+                //echo $exception->getMessage();
                 abort(404);
             }
 
@@ -54,16 +54,27 @@ class AssistController extends Controller
             } else {
 
                 try {
+                    $url = '/';
+                    $redisKey = $key . '_url';
 
-                    $file = File::where('file_key', $key)->firstOrFail();
+                    if (!Redis::exists($redisKey)) {
 
-                    return redirect(url($file->file_url));
+                        $url = Redis::get($redisKey);
+
+                    } else {
+
+                        $file = File::where('file_key', $key)->firstOrFail();
+                        $url = $file->file_url;
+                        Redis::set($redisKey,$url);
+                        Redis::expire($redisKey, 3600);//设置过期时间
+                    }
+
+                    return redirect(url($url));
 
                 } catch (\Exception $findException) {
 
                     abort(404);
                 }
-
 
             }
 
