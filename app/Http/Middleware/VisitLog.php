@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 
 use App\Http\Model\VisitLog as VisitLogModel;
+use Illuminate\Support\Facades\Redis;
 use App\Lib\Common;
 
 class VisitLog
@@ -19,21 +20,21 @@ class VisitLog
     public function handle($request, Closure $next)
     {
         $ip = $_SERVER["REMOTE_ADDR"];
+
         $ipCity = Common::getIpCity($ip);
         if ($ipCity) {
 
             if (strpos($ipCity, '阿里巴巴')) {
-
                 return abort(404);
             }
         }
 
-        $filterAll = ['101.226.162.90', '111.206.241.76', '125.88.222.250','111.206.221.98','220.178.7.202'];//过滤360网站检测的ip
+        $filterAll = ['101.226.162.90', '111.206.241.76', '125.88.222.250', '111.206.221.98', '220.178.7.202'];//过滤360网站检测的ip
+
 
         if (!in_array($ip, $filterAll)) {
 
-            if (empty(session('isVisit'))) {
-
+            if (!Redis::exists($ip)) {
                 $res = VisitLogModel::create(
                     [
                         'ip' => $ip,
@@ -43,7 +44,8 @@ class VisitLog
                 );
 
                 if ($res) {
-                    session(['isVisit' => 1]);
+                    Redis::set($ip, 1);//设置访问过
+                    Redis::expire($ip, 600);//设置过期时间
                 }
             }
         }
