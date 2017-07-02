@@ -16,8 +16,7 @@ class AssistController extends Controller
 
         $type = 'jpeg';
 
-        if (!Redis::exists($key)) {
-
+        if (Redis::exists($key)) {
             try {
 
                 $img = Redis::get($key);
@@ -45,18 +44,17 @@ class AssistController extends Controller
             }
             header('Content-type: image/' . $type);
             echo $img;
+            
         } else {
 
             try {
                 $url = '/';
                 $redisKey = $key . '_url';
 
-                if (!Redis::exists($redisKey)) {
-
+                if (Redis::exists($redisKey)) {
                     $url = Redis::get($redisKey);
 
                 } else {
-
                     $file = File::where('file_key', $key)->firstOrFail();
                     $url = $file->file_url;
                     Redis::set($redisKey, $url);
