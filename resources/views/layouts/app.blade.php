@@ -12,7 +12,7 @@
 
     <!-- Bootstrap -->
     <link href="http://cdn.bootcss.com/normalize/7.0.0/normalize.min.css" rel="stylesheet">
-    <link href="/css/mincss/app.min.css" rel="stylesheet">
+    <link href="/css/app.css" rel="stylesheet">
     {{--<link href="/css/app.css" rel="stylesheet"/>--}}
     <link href="http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/lib/sinaEmotion/jquery.sinaEmotion.css"/>
