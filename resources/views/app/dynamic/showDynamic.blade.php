@@ -358,10 +358,7 @@ if ($dynamicType == 0) {
                 };
                 activeFollowListener(followingGroup, data);
             });
-
-
         })();
-
     </script>
 
 

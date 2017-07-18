@@ -9,9 +9,7 @@
 @section('content')
     <div class="container  index" id="all-container">
 
-
         <div class="row">
-
             <div class="col-sm-23 col-xs-offset-1 col-xs-22">
 
             <?php $dynamicLength = count($dynamics);  ?>

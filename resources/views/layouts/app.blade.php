@@ -265,21 +265,16 @@
 @endif
 {{--body 部分--}}
 <div class="body">
-
-
     <!--header-->
     <header class="header">
 
         <div class="container">
-
 
             {{--已登录状态ul--}}
             @if(!empty(session('user')))
 
                 <ul class="nav nav-pills" style="display: inline-block">
                     <li class="active"><a href="{{url('/')}}">首页</a></li>
-
-
                     <li class="notification dropdown">
                         <a data-hover="dropdown" class="notification-btn dropdown-toggle" data-toggle="dropdown">
                             <i class="iconfont ic-navigation-notification menu-icon"></i>
@@ -319,8 +314,6 @@
                 <ul class="nav nav-pills navbar-right">
 
                     <li class="dropdown">
-
-
                         <a class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
                            href="u/{{session('user_id')}}">
 
@@ -396,7 +389,6 @@
             @endif
         </div>
 
-
     </header>
 
     <div style="margin-top: 68px" class="margin-top-div"></div>
@@ -406,9 +398,20 @@
 
     @yield('content')
 
+    <footer class="container">
+        <div class="row">
+            <div class="col-sm-16 col-xs-offset-1 col-xs-22 main">
 
-    <footer class="footer">
-
+                <a target="_blank" href="/about">关于本站</a>
+                <em> · </em>
+                <a target="_blank" href="/contact">联系我们</a>
+                <em> · </em>
+                <a target="_blank" href="http://yuicer.com">yuicer.com</a>
+                <div class="icp">
+                    ©2016-2017 beagoodman.cn /  <a target="_blank" href="http://www.beian.gov.cn"> 渝ICP备16008532号-1</a>
+                </div>
+            </div>
+        </div>
     </footer>
 
 </div>
@@ -425,7 +428,6 @@
 
 <script>
     /*公共方法区*/
-
 
     /*点赞操作*/
     function doLike(likeDom, url, postData, likeNumDom, likedClass) {
@@ -531,7 +533,6 @@
         startTips(followingGroupDom.find(followingClass), '取消关注');
 
     }
-
 
     $(document).ready(function () {
 
@@ -639,7 +640,6 @@
             openNewMood();
 
             function openNewMood() {
-
 
                 var imgKeys = $("#img_keys").val('');
 

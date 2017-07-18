@@ -12,17 +12,20 @@
 */
 
 //Route::any('/test', 'TestController@test');
-Route::get('/forteacherwu', function (){
-
-
-    return view('test');
-});
+//Route::get('/forteacherwu', function (){
+//    return view('test');
+//});
 Route::post('/forteacherwulike', 'TestController@foTeacher');
 
 
 
 Route::get('/', 'IndexController@index');
-
+Route::get('/about', function (){
+    return view('app.about');
+});
+Route::get('/contact', function (){
+    return view('app.contact');
+});
 
 //for auth
 Route::post('/register', 'AuthController@register');
@@ -108,7 +111,5 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/message','MessageController@index');
 
     Route::post('/sendmessage','MessageController@sendMessage');
-
-
 
 });

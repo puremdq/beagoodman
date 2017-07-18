@@ -17,8 +17,6 @@ class Message extends Model
 
         return User::getAvatar($this->from_id);
 
-
-
     }
 
 }

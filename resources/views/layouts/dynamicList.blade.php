@@ -240,18 +240,16 @@
 
             window.onscroll = function () {
 
-
                 if (!LoadMoreDom.hasClass("hide") && isElementInViewport($(LoadMoreDom)[0])) {
 
                     if(LoadMoreDom.html()!='已加载全部'){
 
-                        if (pageDom.val() <= 10) {
+                        if (pageDom.val() <= 5) {
 
                             LoadMoreDom.html('正在加载...');
                             LoadMoreDom.click();
 
                         } else {
-
                             LoadMoreDom.html('加载更多');
                         }
                     }
