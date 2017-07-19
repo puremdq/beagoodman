@@ -18,7 +18,6 @@
         }
 
         #title {
-
             width: 100%;
             height: 50px;
             margin: 10px auto;
@@ -30,7 +29,6 @@
             color: #111;
             font-weight: 900;
             text-align: center;
-
         }
 
         .nav {
@@ -40,7 +38,7 @@
             width: 100%;
             background: #f8f8f8;
 
-            height: 50px;
+            min-height: 60px;
         }
 
         .nav div {
@@ -67,6 +65,11 @@
             background-color: #04b03c;
 
         }
+        .write-content{
+            margin-top:60px ;
+        }
+
+
 
     </style>
 
@@ -80,14 +83,14 @@
         <span style="margin-left: 10px;color: #bd3a55;">新文章</span>
     </div>
 
-    <div style="float: right">
+    <div style="float: right" class="btns">
         <a class="btn" id="clear_btn" href="javascript:void (0);">清空</a>
         <a class="btn" id="sub_btn" href="javascript:void (0);">发表</a>
     </div>
 
 </div>
 
-<div style="width: 80%;margin: 50px auto">
+<div class="write-content" style="width: 80%;margin: 50px auto">
 
     <form method="post" action="{{url('dynamic')}}" id="article_form">
 
@@ -118,6 +121,16 @@
 
 <!--这里引用jquery和wangEditor.js-->
 <script type="text/javascript">
+
+    (function initCss() {
+
+        if(document.body.clientWidth<600){
+
+            $(".write-content").css("margin-top","120px");
+            $(".btns").css('float','left');
+        }
+
+    })();
 
     (function () {
 

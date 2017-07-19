@@ -110,7 +110,24 @@
     @include('layouts.commentJs')
     @include('layouts.dynamicList')
 
+    <footer class="container">
+        <div class="row">
+            <div class="col-sm-16 col-xs-offset-1 col-xs-22 main">
+
+                <a target="_blank" href="/about">关于本站</a>
+                <em> · </em>
+                <a target="_blank" href="/contact">联系我们</a>
+                <em> · </em>
+                <a target="_blank" href="http://yuicer.com">yuicer.com</a>
+                <div class="icp">
+                    ©2016-2017 <a target="_blank" href="http://beagoodman.cn">beagoodman.cn</a> /  <a target="_blank" href="http://www.beian.gov.cn"> 渝ICP备16008532号-1</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
 @endsection
+
 
 @section('script')
     <script src="http://cdn.bootcss.com/imageviewer/0.5.1/viewer.min.js"></script>
