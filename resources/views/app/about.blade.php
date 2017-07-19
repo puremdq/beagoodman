@@ -63,6 +63,16 @@
             margin: 50px auto;
         }
 
+        blockquote {
+            display: block;
+            border-left: 8px solid #d0e5f2;
+            padding: 5px 10px;
+            margin: 10px 0;
+            line-height: 1.4;
+            font-size: 100%;
+            background-color: #f1f1f1;
+        }
+
     </style>
 
 </head>
