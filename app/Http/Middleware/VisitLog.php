@@ -25,7 +25,7 @@ class VisitLog
 
         if ($ipCity) {
 
-            if (strpos($ipCity, '阿里巴巴')) {
+            if (strpos($ipCity, '阿里巴巴') || strpos($ipCity, '阿里云')) {
                 return abort(404);
             }
         }
@@ -50,7 +50,6 @@ class VisitLog
         }
         return $next($request);
     }
-
 
     function getCity($ip)
     {

@@ -65,9 +65,9 @@ class AuthController extends Controller
         }
 
         $data = $request->except(['_token', 'captcha']);
+        $username=$request->input('username');
 
-        if (is_numeric(($request->input('username'))[0])) {
-
+        if (is_numeric($username[0])) {
             return json_encode([
                 'state' => 1,
                 'msg' => '不能是数字开头'
